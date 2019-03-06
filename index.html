@@ -27,6 +27,19 @@
 		</div>
 	</nav>
 
+	<div class="container-fluid">
+		<div class="mainWrp" id="app">
+			<div class="carousel">
+				<ul class="imgsWrp clear">
+					<li v-for="item in imgsArray">
+						<img :src="'https://jkerush.github.io/jane_prj/jianshu/wrap/img/'+item" alt="">
+					</li>
+				</ul>
+				<p><span>1</span>/{{imgsLens}}</p>
+			</div>
+		</div>
+	</div>	
+
 	<script src="main.js"></script>
 
     </body>
