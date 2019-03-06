@@ -1,0 +1,36 @@
+.header {
+	height: 30px;
+	text-align: right;
+	background-color: grey;
+}
+.parent {
+    position: relative;
+}
+.search {
+    width: 600px;
+    height: 40px;
+    border-radius: 18px;
+    outline: none;
+    border: 1px solid #ccc;
+    padding-left: 20px;
+}
+.explore_entry{
+	height: 20%;
+	width: auto;
+	/*padding: 20px;*/
+}
+#explore_app{
+
+}
+.nav_btn:after{
+	content: "|";
+	display: inline-block;
+}
+.img_detail{
+	width:100%;
+	height:auto;
+}
+.btn_add2cart{
+	width:100%;
+	height:auto;
+}
