@@ -10,7 +10,7 @@
 		<br>
 		<div class="container-fluid">
 			<div class="row">
-				<h4 class="col-xs-1">E-Book</h4>
+				<a href="./index.html"><h4 class="col-xs-1">E-Book</h4></a>
 				<form action="" class="parent col-xs-8">
 					<input type="text" class="search" placeholder="Search">
 					<!--<input type="button" name="search" id="" class="btn">-->
@@ -19,15 +19,15 @@
 		</div>
 		<div class="container-fluid">
 			<div class="pull-right">
-				<a class="nav_btn" href="#">Departments</a>
-				<a class="nav_btn" href="#">History</a>
-				<a class="nav_btn" href="#">Cart</a>
+				<!--<a class="nav_btn" href="#">Departments</a>-->
+				<!--<a class="nav_btn" href="#">History</a>    -->
+				<!--<a class="nav_btn" href="#">Cart</a>       -->
 				<a class="nav_btn" href="#">Login</a>      
 			</div>
 		</div>
 	</nav>
 
-	<div class="container-fluid">
+	<div id="detail_app" class="container-fluid">
 		<div class="row">
 			<div class="col-xs-3">
 				<div class="panel panel-default">
@@ -41,9 +41,9 @@
 				<button type="button" class="btn_add2cart">Add to Cart</button>
 			</div>
 			<div class="col-xs-8">
-				<h2>book name</h2>
-				<h4>subtitle</h4>
-				<p>Hugo Award winner I Have No Mouth and I Must Scream is living legend Harlan Ellison’s masterpiece of future warfare. In a post-apocalyptic world, four men and one woman are all that remain of the human race, brought to near extinction by an artificial intelligence. Programmed to wage war on behalf of its creators, the AI became self-aware and turned against all humanity. The five survivors are prisoners, kept alive and subjected to brutal torture by the hateful and sadistic machine in an endless cycle of violence.</p>	
+				<h2>{{ name }}</h2>
+				<h4>{{subtitle}}</h4>
+				<p>{{content}}</p>
 			</div>	
 		</div>
 	</div>
