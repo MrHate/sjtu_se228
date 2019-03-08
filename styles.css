@@ -77,8 +77,8 @@ li {
 
 }
 .nav_btn:after{
-	content: "|";
-	display: inline-block;
+	/*content: "|";         */
+	/*display: inline-block;*/
 }
 .img_detail{
 	width:100%;

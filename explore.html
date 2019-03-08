@@ -19,28 +19,51 @@
 		</div>
 		<div class="container-fluid">
 			<div class="pull-right">
-				<a class="nav_btn" href="#">Departments</a>
-				<a class="nav_btn" href="#">History</a>
-				<a class="nav_btn" href="#">Cart</a>
+				<!--<a class="nav_btn" href="#">Departments</a>-->
+				<!--<a class="nav_btn" href="#">History</a>    -->
+				<!--<a class="nav_btn" href="#">Cart</a>       -->
 				<a class="nav_btn" href="#">Login</a>      
 			</div>
 		</div>
 	</nav>
-
-	<div id="explore_app" class="container-fluid">
-		<div class="row pull-left">
-			<div v-for="i in bookList" class="col-xs-2">
-				<div class="panel panel-default">
-					<div class="panel-body text-center">
-						<img class="explore_entry" :src="i.path">
-					</div>
-					<div class="panel-footer">
-						<p>{{i.name}}</p>	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-2">
+				<div class="span2">
+					<ul class="nav nav-pills nav-stacked">
+						<li><a href="./index.html">Home</a></li>
+						<li><a href="./explore.html">Explore</a></li>
+						<li><a href="#">Cart</a></li>
+						<li><a href="#">Wishlist</a></li>
+						<li><a href="#">Contact</a></li>
+					</ul>
+				</div>
+			</div>		
+			<div id="explore_app" class="col-xs-10">
+				<div class="row pull-left">
+					<div v-for="i in bookList" class="col-xs-2">
+						<div class="panel panel-default">
+							<div class="panel-body text-center">
+								<img class="explore_entry" :src="i.path">
+							</div>
+							<div class="panel-footer">
+								<p>{{i.name}}</p>	
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
+
+	<footer class="navbar-fixed-bottom">
+		<hr>
+		<div class="container-fluid pull-right">
+			E-book by dgy.
+		</div>
+	</footer>
 
 	<script src="explore.js"></script>
     </body>
