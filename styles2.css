@@ -71,6 +71,14 @@ li {
 #explore_app{
 
 }
+.nav_btn{
+	color: white;
+}
+.nav_btn:hover,
+.nav_btn:focus{
+	color: grey;
+	text-decoration:none;
+}
 .nav_btn:after{
 	/*content: "|";         */
 	/*display: inline-block;*/
@@ -83,6 +91,19 @@ li {
 	width:100%;
 	height:auto;
 }
-#navbar-default{
+
+.navbar-default {
+    background-color: black;
+    border-color: #E7E7E7;
+}
+.navbar-default .navbar-brand {
+    color: #FFF;
+}
+.navbar-fixed-bottom{
+	background-color: black;
+	color: white;
+}
+
+.side_nav_btn{
 	color: black;
 }
