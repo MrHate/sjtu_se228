@@ -1,5 +1,5 @@
-var vm = new Vue({
-	el: "#app",
+var slider = new Vue({
+	el: "#slider_app",
 	data: {
 		// 这里放的都是vm对象的数据，通过vm.xx得到
 		imgsArray: ['slide1.png','slide1.png','slide1.png','slide1.png','slide1.png','slide1.png'],
@@ -7,6 +7,13 @@ var vm = new Vue({
 	},
 	mounted: function() {
 		this.imgsLens = this.imgsArray.length // this指向自己也就是vm，这里把图片数组的长度赋给了vm.imgsLens，自然它就从0变成了6
+	}
+})
+
+var login_dialog = new Vue({
+	el: "#login_app",
+	data:{
+		showDialog: false
 	}
 })
 
