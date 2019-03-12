@@ -21,7 +21,8 @@
 			<div class="pull-right">
 				<div id="login">
 					<!--<button type="button" class="btn" @click="showModal">login</button>-->
-					<a class="nav_btn" href="#" @click="showModal">Sign up/Login</a>      
+					<p v-if="isLoggedIn">{{username}}</p>
+					<a v-else="" class="nav_btn" href="#" @click="showModal">Sign up/Login</a>      
 					<div class="login_dialog" v-show="showDialog">
 						<br>
 						<p>test dialog</p>

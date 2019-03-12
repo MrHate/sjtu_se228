@@ -14,6 +14,7 @@ var login_modal = new Vue({
 	el:"#login",
 	data:{
 		showDialog:false,
+		isLoggedIn:false,
 		username:"",
 		password:""
 	},
@@ -25,6 +26,7 @@ var login_modal = new Vue({
 			this.showDialog = false;
 			this.username = this.$refs.username_input.value;
 			this.password = this.$refs.password_input.value;
+			this.isLoggedIn = true;
 			console.log("user: "+this.username+"\npassword: "+this.password);
 		}
 	}
