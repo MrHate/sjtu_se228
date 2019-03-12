@@ -10,13 +10,25 @@ var slider = new Vue({
 	}
 })
 
-var login_dialog = new Vue({
-	el: "#login_app",
+var login_modal = new Vue({
+	el:"#login",
 	data:{
-		showDialog: false
+		showDialog:false,
+		username:"",
+		password:""
+	},
+	methods:{
+		showModal:function(){
+			this.showDialog = true;
+		},
+		closeModal:function(){
+			this.showDialog = false;
+			this.username = this.$refs.username_input.value;
+			this.password = this.$refs.password_input.value;
+			console.log("user: "+this.username+"\npassword: "+this.password);
+		}
 	}
 })
-
 //  接着就是当页面onload后执行轮播的函数了
 window.onload = function() {
 	var imgsWrp = document.querySelector(".imgsWrp"),
@@ -25,15 +37,15 @@ window.onload = function() {
 		i = 0;
 
 	// 这里根据图片数量分别算出li的宽度和ul的宽度
-	imgsWrp.style.width = vm.imgsLens * 100 + "%";
-	var widthLi = 100 / vm.imgsLens + "%";
-	for (var ils = 0; ils < vm.imgsLens; ils++) {
+	imgsWrp.style.width = slider.imgsLens * 100 + "%";
+	var widthLi = 100 / slider.imgsLens + "%";
+	for (var ils = 0; ils < slider.imgsLens; ils++) {
 		imgsLi[ils].style.width = widthLi;
 	}
 	// 定时函数，每3秒变更i，同时变换ul要transform的值
 	setInterval(function() {
-		i < vm.imgsLens - 1 ? i++ : i = 0;
-		imgsWrp.style.transform = "translateX(-" + 100 / vm.imgsLens * i + "%)";
+		i < slider.imgsLens - 1 ? i++ : i = 0;
+		imgsWrp.style.transform = "translateX(-" + 100 / slider.imgsLens * i + "%)";
 		markSpan.textContent = i + 1
 	}, 3000)
 }

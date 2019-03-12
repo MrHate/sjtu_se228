@@ -12,13 +12,14 @@
 			<p>test dialog</p>
 			<form>
 				 User:<br>
-				<input type="text" name="username">
+				<input type="text" name="username" ref="username_input">
 				<br>
-				 Passname:<br>
-				<input type="text" name="password">
+				 Password:<br>
+				<input type="text" name="password" ref="password_input">
 				<br><br>
 				<!--<input type="submit" class="btn" value="Submit">-->
-				<button type="submit" class="btn" @click="closeModal">close</button>
+				<button type="button" class="btn" @click="closeModal">log in</button>
+				<button type="button" class="btn" @click="closeModal">sign up</button>
 			</form> 
 			<br>
 		</div>
@@ -43,7 +44,9 @@
 		var vm=new Vue({
 			el:"#login",
 			data:{
-				showDialog:false
+				showDialog:false,
+				username:"",
+				password:""
 			},
 			methods:{
 				showModal:function(){
@@ -51,6 +54,9 @@
 				},
 				closeModal:function(){
 					this.showDialog = false;
+					this.username = this.$refs.username_input.value;
+					this.password = this.$refs.password_input.value;
+					console.log("user: "+this.username+"\npassword: "+this.password);
 				}
 			}
 		})

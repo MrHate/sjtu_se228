@@ -86,3 +86,18 @@ li {
 #navbar-default{
 	color: black;
 }
+.login_dialog{
+	height:400px;
+	width:300px;
+	display:flex;
+	background-color:#fff;
+	box-shadow: 2px 2px 20px 1px;
+	overflow-x:auto;
+	flex-direction:column;
+	align-items:center;
+    left: 50%;
+	margin: -200px 0 0 -150px;
+    position: fixed;
+    top: 50%;
+    z-index: 25;
+}
