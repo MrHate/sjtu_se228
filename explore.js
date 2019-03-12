@@ -1,8 +1,3 @@
-//Vue.component('recommended', {
-//  props: ['entry'],
-//  template: '<li class="entry_item"><img :src={entry.text} alt="book" /></li>'
-//})
-
 var explore_app = new Vue({
   el: '#explore_app',
   data: {
@@ -16,5 +11,17 @@ var explore_app = new Vue({
       { id: 6, path: 'images/b3.jpeg',name:'Wisky' },
       { id: 7, path: 'images/b3.jpeg',name:'Doki' }
     ]
+  },
+  methods: {
+	  booknamePressed:function(e){
+		  //console.log(e.target);
+		  if(e.target.style.color == "rgb(0, 0, 0)"){
+			  e.target.style.color = "#f00";
+		  }
+		  else{
+			  console.log(e.target.style.color);
+			  e.target.style.color = "#000";
+		  }
+	  }
   }
 })
