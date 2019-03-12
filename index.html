@@ -21,9 +21,12 @@
 			<div class="pull-right">
 				<div id="login">
 					<!--<button type="button" class="btn" @click="showModal">login</button>-->
-					<p v-if="isLoggedIn">{{username}}</p>
+					<div v-if="isLoggedIn">
+						{{username}}
+						<a href="#" @click="logoutFun">Log out</a>
+					</div>
 					<a v-else="" class="nav_btn" href="#" @click="showModal">Sign up/Login</a>      
-					<div class="login_dialog" v-show="showDialog">
+					<div class="login_modal" v-show="showDialog">
 						<br>
 						<p>test dialog</p>
 						<form>
@@ -34,9 +37,13 @@
 							<input type="text" name="password" ref="password_input">
 							<br><br>
 							<!--<input type="submit" class="btn" value="Submit">-->
-							<button type="button" @click="closeModal">log in</button>
-							<button type="button" @click="closeModal">sign up</button>
+							<button type="button" @click="loginFun">log in</button>
+							<button type="button" @click="signupFun">sign up</button>
 						</form> 
+						<div v-show="showAlert">
+							<br>
+							Username and password can not be empty.
+						</div>
 						<br>
 					</div>
 				</div>

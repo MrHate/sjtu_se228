@@ -1,12 +1,11 @@
 var slider = new Vue({
 	el: "#slider_app",
 	data: {
-		// 这里放的都是vm对象的数据，通过vm.xx得到
 		imgsArray: ['slide1.png','slide1.png','slide1.png','slide1.png','slide1.png','slide1.png'],
 		imgsLens: 0
 	},
 	mounted: function() {
-		this.imgsLens = this.imgsArray.length // this指向自己也就是vm，这里把图片数组的长度赋给了vm.imgsLens，自然它就从0变成了6
+		this.imgsLens = this.imgsArray.length 
 	}
 })
 
@@ -15,6 +14,7 @@ var login_modal = new Vue({
 	data:{
 		showDialog:false,
 		isLoggedIn:false,
+		showAlert:false,
 		username:"",
 		password:""
 	},
@@ -22,16 +22,30 @@ var login_modal = new Vue({
 		showModal:function(){
 			this.showDialog = true;
 		},
-		closeModal:function(){
-			this.showDialog = false;
+		loginFun:function(){
 			this.username = this.$refs.username_input.value;
 			this.password = this.$refs.password_input.value;
+			if(this.username == "" || this.password == ""){
+				this.showAlert = true;
+				return;
+			}
+			this.showAlert = false;
+			this.showDialog = false;
 			this.isLoggedIn = true;
 			console.log("user: "+this.username+"\npassword: "+this.password);
+		},
+		signupFun:function(){
+			alert(this.$refs.username_input.value);
+		},
+		logoutFun:function(){
+			this.showDialog = false;
+			this.username = "";
+			this.password = "";
+			this.isLoggedIn = false;
 		}
 	}
 })
-//  接着就是当页面onload后执行轮播的函数了
+
 window.onload = function() {
 	var imgsWrp = document.querySelector(".imgsWrp"),
 		imgsLi = imgsWrp.querySelectorAll("li"),

@@ -86,7 +86,7 @@ li {
 #navbar-default{
 	color: black;
 }
-.login_dialog{
+.login_modal{
 	height:400px;
 	width:300px;
 	display:flex;
