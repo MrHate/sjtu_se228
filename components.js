@@ -63,5 +63,12 @@ Vue.component('header-contents',{
 				</div>\
 			</div>\
 		</div>'
-})
+});
 				
+Vue.component('footer-contents',{
+	template:'\
+		<footer class="navbar-fixed-bottom">\
+			<div class="container-fluid pull-right">E-book by dgy.</div>\
+		</footer>\
+	'
+})
