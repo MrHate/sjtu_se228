@@ -71,4 +71,33 @@ Vue.component('footer-contents',{
 			<div class="container-fluid pull-right">E-book by dgy.</div>\
 		</footer>\
 	'
+});
+
+Vue.component('book-list',{
+	data:function() {
+		return{
+			bookList: [
+			  { id: 0, path: 'images/b1.jpeg',name:'ZEN' },
+			  { id: 1, path: 'images/b2.jpeg',name:'Animal God' },
+			  { id: 2, path: 'images/b3.jpeg',name:'Zen & Motor' },
+			  { id: 3, path: 'images/b3.jpeg',name:'Noooo' },
+			  { id: 4, path: 'images/b3.jpeg',name:'Pie Cook' },
+			  { id: 5, path: 'images/b3.jpeg',name:'I Wish' },
+			  { id: 6, path: 'images/b3.jpeg',name:'Wisky' },
+			  { id: 7, path: 'images/b3.jpeg',name:'Doki' }
+			]
+		}
+	},
+	template:'\
+		<div>\
+			<table>\
+				<tr><th>ID</th><th>Name</th><th>Path</th></tr>\
+				<tr v-for="i in bookList">\
+					<th>{{i.id}}</th>\
+					<th><a href="#">{{i.name}}</a></th>\
+					<th>{{i.path}}</th>\
+				</tr>\
+			</table>\
+		</div>\
+	'
 })
