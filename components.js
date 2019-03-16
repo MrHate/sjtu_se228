@@ -100,4 +100,20 @@ Vue.component('book-list',{
 			</table>\
 		</div>\
 	'
+});
+
+Vue.component('nav-menu',{
+	template:'\
+		<div class="col-xs-2">\
+			<div class="span2">\
+				<ul class="nav nav-pills nav-stacked">\
+					<li><a class="side_nav_btn" href="./index.html">Home</a></li>\
+					<li><a class="side_nav_btn" href="./explore.html">Explore</a></li>\
+					<li><a class="side_nav_btn" href="#">Cart</a></li>\
+					<li><a class="side_nav_btn" href="#">Wishlist</a></li>\
+					<li><a class="side_nav_btn" href="#">Contact</a></li>\
+				</ul>\
+			</div>\
+		</div>\
+	'
 })
