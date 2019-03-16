@@ -7,49 +7,12 @@
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     </head>
     <body>
+
+	<script src="components.js"></script>
+
 	<nav class="navbar navbar-default" role="navigatior">
 		<br>
-		<div class="container">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="./index.html">E-Book</a>
-				<form action="" class="pull-right">
-					<input type="text" class="search" placeholder="Search">
-				</form>
-			</div>
-		</div>
-		<div class="container-fluid">
-			<div class="pull-right">
-				<div id="login">
-					<!--<button type="button" class="btn" @click="showModal">login</button>-->
-					<div v-if="isLoggedIn">
-						{{username}}
-						<a href="#" @click="logoutFun">Log out</a>
-					</div>
-					<a v-else="" class="nav_btn" href="#" @click="showModal">Sign up/Login</a>      
-					<div class="login_modal" v-show="showDialog">
-						<br>
-						<p>test dialog</p>
-						<form>
-							 User:<br>
-							<input type="text" name="username" ref="username_input">
-							<br>
-							 Password:<br>
-							<input type="text" name="password" ref="password_input">
-							<br><br>
-							<!--<input type="submit" class="btn" value="Submit">-->
-							<button type="button" @click="loginFun">log in</button>
-							<button type="button" @click="signupFun">sign up</button>
-						</form> 
-						<div v-show="showAlert">
-							<br>
-							Username and password can not be empty.
-						</div>
-						<br>
-					</div>
-				</div>
-
-			</div>
-		</div>
+		<div id="header_contents"><header-contents></header-contents></div>
 	</nav>
 
 	<div class="container-fluid">

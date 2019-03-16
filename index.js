@@ -9,41 +9,8 @@ var slider = new Vue({
 	}
 })
 
-var login_modal = new Vue({
-	el:"#login",
-	data:{
-		showDialog:false,
-		isLoggedIn:false,
-		showAlert:false,
-		username:"",
-		password:""
-	},
-	methods:{
-		showModal:function(){
-			this.showDialog = true;
-		},
-		loginFun:function(){
-			this.username = this.$refs.username_input.value;
-			this.password = this.$refs.password_input.value;
-			if(this.username == "" || this.password == ""){
-				this.showAlert = true;
-				return;
-			}
-			this.showAlert = false;
-			this.showDialog = false;
-			this.isLoggedIn = true;
-			console.log("user: "+this.username+"\npassword: "+this.password);
-		},
-		signupFun:function(){
-			alert(this.$refs.username_input.value);
-		},
-		logoutFun:function(){
-			this.showDialog = false;
-			this.username = "";
-			this.password = "";
-			this.isLoggedIn = false;
-		}
-	}
+var header_contents = new Vue({
+	el:"#header_contents"
 })
 
 window.onload = function() {
