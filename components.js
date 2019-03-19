@@ -36,9 +36,9 @@ Vue.component('header-contents',{
 	},
 	template:'\
 		<div>\
-			<div class="container">\
+			<div class="container-fluid">\
 				<div class="navbar-header">\
-					<a class="navbar-brand" href="./index.html">E-Book</a>\
+					<a class="navbar-brand" href="#">E-Book</a>\
 					<form action="" class="pull-right">\
 						<input type="text" class="search" placeholder="Search">\
 					</form>\
