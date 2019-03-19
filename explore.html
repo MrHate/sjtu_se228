@@ -11,22 +11,19 @@
     <body>
 	<nav class="navbar navbar-default">
 		<br>
-		<div id="header_contents"><header-contents></header-contents></div>
+		<div class="navs"><header-contents></header-contents></div>
 	</nav>
 
 	<div id="route" class="container-fluid">
 		<div class="row">
-			<div id="nav_menu" class="col-xs-2"><nav-menu></nav-menu></div>		
+			<div class="col-xs-1 navs"><nav-menu></nav-menu></div>		
 			<div class="col-xs-10"><router-view></router-view></div>			
 		</div>
 	</div>
 
 	<script>
-		var nav_menu = new Vue({
-			el:'#nav_menu'
-		});
-		var header_contents = new Vue({
-			el:'#header_contents'
+		const navs = new Vue({
+			el:".navs"
 		})
 		var router = new VueRouter({
 			routes:[

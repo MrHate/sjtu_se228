@@ -74,7 +74,7 @@ Vue.component('book-list',{
 		<div>\
 			<table>\
 				<tr v-for="i in bookList">\
-					<th><img :src="i.imgpath" alt="pic" class="list-img"/><router-link :to="i.route">{{i.name}}</router-link></th>\
+					<th><td><img :src="i.imgpath" alt="pic" class="list-img"/></td><td><router-link :to="i.route">{{i.name}}</router-link></td></th>\
 				</tr>\
 			</table>\
 		</div>\
@@ -86,11 +86,11 @@ Vue.component('nav-menu',{
 		<div>\
 			<div class="span2">\
 				<ul class="nav nav-pills nav-stacked">\
-					<li><a class="side_nav_btn" href="#">Home</a></li>\
-					<li><a class="side_nav_btn" href="./explore.html">Explore</a></li>\
-					<li><a class="side_nav_btn" href="#">Cart</a></li>\
-					<li><a class="side_nav_btn" href="#">Wishlist</a></li>\
-					<li><a class="side_nav_btn" href="#">Contact</a></li>\
+					<li><router-link class="side_nav_btn" to="">Home</a></li>\
+					<li><router-link class="side_nav_btn" to="">Explore</a></li>\
+					<li><router-link class="side_nav_btn" to="">Cart</a></li>\
+					<li><router-link class="side_nav_btn" to="">Wishlist</a></li>\
+					<li><router-link class="side_nav_btn" to="">Contact</a></li>\
 				</ul>\
 			</div>\
 		</div>\
@@ -102,11 +102,17 @@ Vue.component('book-detail',{
 	data:function(){
 		t_id = this.book_id;
 		t_book = get_book(t_id);
+		t_img = 'images/'+t_id+'.jpeg';
 		return {
 			name:t_book.name,
 			subtitle:"sub",
 			content:"content",
-			image: "images/b1.jpeg"
+			image: t_img
+		}
+	},
+	methods:{
+		onClickBack:function(){
+			router.go(-1);
 		}
 	},
 	template:'\
@@ -120,6 +126,7 @@ Vue.component('book-detail',{
 						<div class="panel-footer">picture</div>\
 					</div>\
 					<button type="button">Add to Cart</button>\
+					<button type="button" @click="onClickBack">Back</button>\
 				</div>\
 				<div class="col-xs-8">\
 					<h2>{{ name }}</h2>\
