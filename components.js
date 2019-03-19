@@ -1,3 +1,14 @@
+const books = [
+	{id:0,name:"jscom"},
+	{id:1,name:"hacker"},
+	{id:2,name:"C++"},
+	{id:3,name:"touhou"}
+];
+
+function get_book(id){
+	return books[id];
+};
+
 function get_query(name){
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
 	var r = window.location.search.substr(1).match(reg);
@@ -84,6 +95,40 @@ Vue.component('nav-menu',{
 					<li><a class="side_nav_btn" href="#">Wishlist</a></li>\
 					<li><a class="side_nav_btn" href="#">Contact</a></li>\
 				</ul>\
+			</div>\
+		</div>\
+	'
+})
+
+Vue.component('book-detail',{
+	props:['book_id'],
+	data:function(){
+		t_id = this.book_id;
+		t_book = get_book(t_id);
+		return {
+			name:t_book.name,
+			subtitle:"sub",
+			content:"content",
+			image: "images/b1.jpeg"
+		}
+	},
+	template:'\
+		<div class="container-fluid">\
+			<div class="row">\
+				<div class="col-xs-3">\
+					<div class="panel panel-default">\
+						<div class="panel-body">\
+							<img :src="image" alt="picture" class="img_detail"/>\
+						</div>\
+						<div class="panel-footer">picture</div>\
+					</div>\
+					<button type="button">Add to Cart</button>\
+				</div>\
+				<div class="col-xs-8">\
+					<h2>{{ name }}</h2>\
+					<h4>{{subtitle}}</h4>\
+					<p>{{content}}</p>\
+				</div>\
 			</div>\
 		</div>\
 	'

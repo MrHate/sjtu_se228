@@ -5,55 +5,16 @@
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="styles.css">
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="components.js"></script>
+
     </head>
     <body>
-	<nav class="navbar navbar-default" role="navigatior">
-		<br>
-		<div class="container">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="./index.html">E-Book</a>
-				<form action="" class="pull-right">
-					<input type="text" class="search" placeholder="Search">
-				</form>
-			</div>
-		</div>
-		<div class="container-fluid">
-			<div class="pull-right">
-				<a class="nav_btn" href="#">Login</a>      
-			</div>
-		</div>
-	</nav>
 
-	<div id="detail_app" class="container-fluid">
-		<div class="row">
-			<div class="col-xs-3">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<img src="images/b2.jpeg" alt="picture" class="img_detail"/>
-					</div>
-					<div class="panel-footer">
-						picture
-					</div>	
-				</div>
-				<button type="button" class="btn_add2cart">Add to Cart</button>
-			</div>
-			<div class="col-xs-8">
-				<h2>{{ name }}</h2>
-				<h4>{{subtitle}}</h4>
-				<p>{{content}}</p>
-			</div>	
-		</div>
-	</div>
-
+	<div id="bl"><book-detail :book_id="2"></book-detail></div>
+	
 	<script>
-		var detail_app = new Vue({
-			el: '#detail_app',
-			data:{
-				name: 'test book',
-				path: 'images/b1.jpeg',
-				subtitle: 'subtitle',
-				content: 'Download the Vue Devtools extension for a better development experience:https://github.com/vuejs/vue-devtools'
-			}
+		var vm = new Vue({
+			el:"#bl"
 		})
 	</script>
     </body>
