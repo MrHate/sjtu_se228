@@ -1,7 +1,13 @@
+function get_query(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if(r!=null)return unescape(r[2]); return null;
+}
+
 Vue.component('header-contents',{
 	data:function(){
 		return{
-			username:"test",
+			username:get_query("username"),
 			password:""
 		}
 	},
@@ -9,7 +15,7 @@ Vue.component('header-contents',{
 		logoutFun:function(){
 			this.username = "";
 			this.password = "";
-			alert("log out");
+			document.location.href = "login.html";
 		}
 	},
 	template:'\
