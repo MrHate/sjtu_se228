@@ -14,23 +14,29 @@
 		<div id="header_contents"><header-contents></header-contents></div>
 	</nav>
 
-	<div class="container-fluid">
+	<div id="route" class="container-fluid">
 		<div class="row">
-			<div id="nav_menu"><nav-menu></nav-menu></div>		
-			<div id="book_list"><book-list></book-list></div>			
+			<div id="nav_menu" class="col-xs-2"><nav-menu></nav-menu></div>		
+			<div class="col-xs-10"><router-view></router-view></div>			
 		</div>
 	</div>
 
 	<script>
-		var book_list = new Vue({
-			el:'#book_list'
-		});
 		var nav_menu = new Vue({
 			el:'#nav_menu'
 		});
 		var header_contents = new Vue({
 			el:'#header_contents'
 		})
+		var router = new VueRouter({
+			routes:[
+				{path:'/detail/:id',component:{template:'<book-detail :book_id="$route.params.id"></book-detail>'}},
+				{path:'/',component:{template:'<book-list></book-list>'}}
+			]
+		})
+		var vm = new Vue({
+			router
+		}).$mount('#route')
 	</script>
     </body>
 </html>

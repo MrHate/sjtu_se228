@@ -57,27 +57,24 @@ Vue.component('footer-contents',{
 
 Vue.component('book-list',{
 	data:function() {
+		var t_books = [];
+		for(var i in books){
+			var ent = {};
+			ent.id = books[i].id;
+			ent.name = books[i].name;
+			ent.imgpath = 'images/'+ent.id+'.jpeg';
+			ent.route = '/detail/'+ent.id;
+			t_books.push(ent);
+		}
 		return{
-			bookList: [
-			  { id: 0, path: 'images/b1.jpeg',name:'ZEN' },
-			  { id: 1, path: 'images/b2.jpeg',name:'Animal God' },
-			  { id: 2, path: 'images/b3.jpeg',name:'Zen & Motor' },
-			  { id: 3, path: 'images/b3.jpeg',name:'Noooo' },
-			  { id: 4, path: 'images/b3.jpeg',name:'Pie Cook' },
-			  { id: 5, path: 'images/b3.jpeg',name:'I Wish' },
-			  { id: 6, path: 'images/b3.jpeg',name:'Wisky' },
-			  { id: 7, path: 'images/b3.jpeg',name:'Doki' }
-			]
+			bookList: t_books
 		}
 	},
 	template:'\
 		<div>\
 			<table>\
-				<tr><th>ID</th><th>Name</th><th>Path</th></tr>\
 				<tr v-for="i in bookList">\
-					<th>{{i.id}}</th>\
-					<th><a href="#">{{i.name}}</a></th>\
-					<th>{{i.path}}</th>\
+					<th><img :src="i.imgpath" alt="pic" class="list-img"/><router-link :to="i.route">{{i.name}}</router-link></th>\
 				</tr>\
 			</table>\
 		</div>\
@@ -86,10 +83,10 @@ Vue.component('book-list',{
 
 Vue.component('nav-menu',{
 	template:'\
-		<div class="col-xs-2">\
+		<div>\
 			<div class="span2">\
 				<ul class="nav nav-pills nav-stacked">\
-					<li><a class="side_nav_btn" href="./index.html">Home</a></li>\
+					<li><a class="side_nav_btn" href="#">Home</a></li>\
 					<li><a class="side_nav_btn" href="./explore.html">Explore</a></li>\
 					<li><a class="side_nav_btn" href="#">Cart</a></li>\
 					<li><a class="side_nav_btn" href="#">Wishlist</a></li>\
