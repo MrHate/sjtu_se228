@@ -86,6 +86,7 @@ li {
 #navbar-default{
 	color: black;
 }
+#login,
 .login_modal{
 	height:400px;
 	width:300px;
@@ -100,6 +101,10 @@ li {
     position: fixed;
     top: 50%;
     z-index: 25;
+}
+.login-input{
+	width:200px;
+	height:30px;
 }
 table, th, td {
   border: 1px solid black;
