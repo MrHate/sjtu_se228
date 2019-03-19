@@ -1,8 +1,10 @@
 const books = [
-	{id:0,name:"jscom"},
-	{id:1,name:"hacker"},
+	{id:0,name:"Jscom"},
+	{id:1,name:"Hacker"},
 	{id:2,name:"C++"},
-	{id:3,name:"touhou"}
+	{id:3,name:"Touhou"},
+	{id:4,name:"Hiii"},
+	{id:5,name:"Blue"}
 ];
 
 function get_book(id){
@@ -72,10 +74,15 @@ Vue.component('book-list',{
 	},
 	template:'\
 		<div>\
-			<table>\
-				<tr v-for="i in bookList">\
-					<th><td><img :src="i.imgpath" alt="pic" class="list-img"/></td><td><router-link :to="i.route">{{i.name}}</router-link></td></th>\
-				</tr>\
+			<table class="table" v-for="i in bookList">\
+				<router-link :to="i.route">\
+					<button class="btn btn-default book-entry">\
+						<div class="container" style="width:100%">\
+							<img :src="i.imgpath" alt="pic" class="col-xs-1 list-img"/>\
+							<p class="col-xs-1">{{i.name}}</p>\
+						</div>\
+					</button>\
+				</router-link>\
 			</table>\
 		</div>\
 	'
@@ -86,11 +93,11 @@ Vue.component('nav-menu',{
 		<div>\
 			<div class="span2">\
 				<ul class="nav nav-pills nav-stacked">\
-					<li><router-link class="side_nav_btn" to="">Home</a></li>\
-					<li><router-link class="side_nav_btn" to="">Explore</a></li>\
-					<li><router-link class="side_nav_btn" to="">Cart</a></li>\
-					<li><router-link class="side_nav_btn" to="">Wishlist</a></li>\
-					<li><router-link class="side_nav_btn" to="">Contact</a></li>\
+					<li><router-link class="side_nav_btn" to="">Home</router-link></li>\
+					<li><router-link class="side_nav_btn" to="">Explore</router-link></li>\
+					<li><router-link class="side_nav_btn" to="">Cart</router-link></li>\
+					<li><router-link class="side_nav_btn" to="">Wishlist</router-link></li>\
+					<li><router-link class="side_nav_btn" to="">Contact</router-link></li>\
 				</ul>\
 			</div>\
 		</div>\

@@ -32,9 +32,8 @@
 	height:30px;
 }
 table, th{             
-  border: 1px solid black;  
+  /*border: 1px solid black;  */
   border-collapse: collapse;
-  width: 70%;
 }                           
 td{
 	padding: 10px;
@@ -44,3 +43,6 @@ td{
 	width:80px;              
 	padding:5px;              
 }                           
+.book-entry{
+	width:70%;
+}
