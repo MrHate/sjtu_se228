@@ -1,10 +1,10 @@
 const books = [
-	{id:0,name:"Jscom"},
-	{id:1,name:"Hacker"},
-	{id:2,name:"C++"},
-	{id:3,name:"Touhou"},
-	{id:4,name:"Hiii"},
-	{id:5,name:"Blue"}
+	{id:0,name:"Jscom",price:"$10.99",description:"This is a book in black.Since the Sass port has a separate repo and serves a slightly different audience, the contents of the project differ greatly from the main Bootstrap project. This ensures the Sass port is as compatible with as many Sass-based systems as possible."},
+	{id:1,name:"Hacker",price:"$2.99",description:"If you are hacker.Using color to add meaning to a button only provides a visual indication, which will not be conveyed to users of assistive technologies – such as screen readers. Ensure that information denoted by the color is either obvious from the content itself (the visible text of the button), or is included through alternative means, such as additional text hidden with the .sr-only class."},
+	{id:2,name:"C++",price:"$13.99",description:"C++++++++++++++++."},
+	{id:3,name:"Touhou",price:"$11.99",description:"Where is Gensokyo."},
+	{id:4,name:"Hiii",price:"$4.99",description:"Hello world."},
+	{id:5,name:"Blue",price:"$9.99",description:"Blue means sadness."}
 ];
 
 function get_book(id){
@@ -43,7 +43,7 @@ Vue.component('header-contents',{
 			</div>\
 			<div class="container-fluid">\
 				<div class="pull-right">\
-					<div>{{username}}<a href="#" @click="logoutFun">Log out</a></div>\
+					<div>{{username}}, <a href="#" @click="logoutFun">Log out</a></div>\
 				</div>\
 			</div>\
 		</div>'
@@ -66,6 +66,7 @@ Vue.component('book-list',{
 			ent.name = books[i].name;
 			ent.imgpath = 'images/'+ent.id+'.jpeg';
 			ent.route = '/detail/'+ent.id;
+			ent.price = books[i].price;
 			t_books.push(ent);
 		}
 		return{
@@ -79,7 +80,10 @@ Vue.component('book-list',{
 					<button class="btn btn-default book-entry">\
 						<div class="container" style="width:100%">\
 							<img :src="i.imgpath" alt="pic" class="col-xs-1 list-img"/>\
-							<p class="col-xs-1">{{i.name}}</p>\
+							<div class="col-xs-2">\
+								<h4>{{i.name}}</h4>\
+								<p class="col-xs-1">{{i.price}}</p>\
+							</div>\
 						</div>\
 					</button>\
 				</router-link>\
@@ -112,8 +116,8 @@ Vue.component('book-detail',{
 		t_img = 'images/'+t_id+'.jpeg';
 		return {
 			name:t_book.name,
-			subtitle:"sub",
-			content:"content",
+			subtitle:t_book.price,
+			content:t_book.description,
 			image: t_img
 		}
 	},
@@ -128,12 +132,12 @@ Vue.component('book-detail',{
 				<div class="col-xs-3">\
 					<div class="panel panel-default">\
 						<div class="panel-body">\
-							<img :src="image" alt="picture" class="img_detail"/>\
+							<img :src="image" alt="picture" class="img_detail" style="width:100%;height:60%"/>\
 						</div>\
-						<div class="panel-footer">picture</div>\
+						<div class="panel-footer text-center">{{name}}</div>\
 					</div>\
-					<button type="button">Add to Cart</button>\
-					<button type="button" @click="onClickBack">Back</button>\
+					<button class="btn btn-default" type="button">Add to Cart</button>\
+					<button class="btn btn-default" type="button" @click="onClickBack">Back</button>\
 				</div>\
 				<div class="col-xs-8">\
 					<h2>{{ name }}</h2>\
