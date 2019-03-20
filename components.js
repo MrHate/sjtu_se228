@@ -35,7 +35,7 @@ Vue.component('header-contents',{
 		<div>\
 			<div class="container-fluid header">\
 				<div class="navbar-header">\
-					<a class="navbar-brand" href="#">E-Book</a>\
+					<h3 class="navbar-brand" href="#">E-Book</h3>\
 					<form action="" class="pull-right">\
 						<input type="text" class="search" placeholder="Search">\
 					</form>\
@@ -98,8 +98,8 @@ Vue.component('nav-menu',{
 		<div>\
 			<div class="span2">\
 				<ul class="nav nav-pills nav-stacked">\
-					<li><router-link class="side_nav_btn" to="">Home</router-link></li>\
-					<li><router-link class="side_nav_btn" to="">Explore</router-link></li>\
+					<li><router-link class="side_nav_btn" to="/">Home</router-link></li>\
+					<li><router-link class="side_nav_btn" to="/all">All Books</router-link></li>\
 					<li><router-link class="side_nav_btn" to="">Cart</router-link></li>\
 					<li><router-link class="side_nav_btn" to="">Wishlist</router-link></li>\
 					<li><router-link class="side_nav_btn" to="">Contact</router-link></li>\
