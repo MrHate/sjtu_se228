@@ -33,7 +33,7 @@ Vue.component('header-contents',{
 	},
 	template:'\
 		<div>\
-			<div class="container-fluid">\
+			<div class="container-fluid header">\
 				<div class="navbar-header">\
 					<a class="navbar-brand" href="#">E-Book</a>\
 					<form action="" class="pull-right">\
@@ -41,10 +41,11 @@ Vue.component('header-contents',{
 					</form>\
 				</div>\
 			</div>\
-			<div class="container-fluid">\
-				<div class="pull-right">\
-					<div>{{username}}, <a href="#" @click="logoutFun">Log out</a></div>\
-				</div>\
+			<div>\
+				<ul class="nav navbar-nav pull-right">\
+					<li class="active"><a href="#">{{username}}</a></li>\
+					<li><a href="#" @click="logoutFun">Log out</a></li>\
+				</ul>\
 			</div>\
 		</div>'
 });
