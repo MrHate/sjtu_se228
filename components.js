@@ -20,6 +20,7 @@ function get_query(name){
 Vue.component('header-contents',{
 	data:function(){
 		return{
+			searchText:"",
 			username:get_query("username"),
 			password:""
 		}
@@ -29,16 +30,33 @@ Vue.component('header-contents',{
 			this.username = "";
 			this.password = "";
 			document.location.href = "login.html";
+			//console.log(this.searchText);
+		},
+		doSearch:function(){
+			router.push({
+				path:`/all/${this.searchText}`,
+			});
 		}
 	},
+	//watch:{
+	//    searchText:function(){
+	//        //Replace search to search
+	//        var o_url = document.location.href;
+	//        if(o_url.search('search') != -1){
+	//            console.log(get_query("search"))
+	//        }
+	//        else{
+	//        }
+	//        //console.log(o_url.search('search') == -1);
+	//    }
+	//},
 	template:'\
 		<div>\
 			<div class="container-fluid header">\
 				<div class="navbar-header">\
 					<h3 class="navbar-brand" href="#">E-Book</h3>\
-					<form action="" class="pull-right">\
-						<input type="text" class="search" placeholder="Search">\
-					</form>\
+					<input type="text" class="search" placeholder="Search" v-model="searchText"  />\
+					<button class="btn btn-default" @click="doSearch">search</button>\
 				</div>\
 			</div>\
 			<div>\
@@ -54,8 +72,7 @@ Vue.component('footer-contents',{
 	template:'\
 		<footer class="navbar-fixed-bottom">\
 			<div class="container-fluid pull-right">E-book by dgy.</div>\
-		</footer>\
-	'
+		</footer>'
 });
 
 Vue.component('book-list',{
@@ -76,7 +93,7 @@ Vue.component('book-list',{
 	},
 	template:'\
 		<div>\
-			<table class="table" v-for="i in bookList">\
+			<div class="table" v-for="i in bookList">\
 				<router-link :to="i.route">\
 					<button class="btn btn-default book-entry">\
 						<div class="container" style="width:100%">\
@@ -88,9 +105,8 @@ Vue.component('book-list',{
 						</div>\
 					</button>\
 				</router-link>\
-			</table>\
-		</div>\
-	'
+			</div>\
+		</div>'
 });
 
 Vue.component('nav-menu',{
@@ -105,8 +121,7 @@ Vue.component('nav-menu',{
 					<li><router-link class="side_nav_btn" to="">Contact</router-link></li>\
 				</ul>\
 			</div>\
-		</div>\
-	'
+		</div>'
 })
 
 Vue.component('book-detail',{
@@ -146,6 +161,35 @@ Vue.component('book-detail',{
 					<p>{{content}}</p>\
 				</div>\
 			</div>\
-		</div>\
-	'
+		</div>'
+})
+
+Vue.component('all-list',{
+	props:['search_text'],
+	data:function(){
+		return{
+			bookList:books
+		}
+	},
+	template:'\
+		<div>\
+			<table class="table">\
+				<thead>\
+				  <tr>\
+					<th scope="col">{{this.search_text}}#</th>\
+					<th scope="col">Name</th>\
+					<th scope="col">Price</th>\
+					<th scope="col">Quantity</th>\
+				  </tr>\
+				</thead>\
+				<tbody>\
+				  <tr v-for="i in bookList">\
+					<th scope="row">{{i.id}}</th>\
+					<td>{{i.name}}</td>\
+					<td>{{i.price}}</td>\
+					<td>1</td>\
+				  </tr>\
+				</tbody>\
+		  </table>\
+	</div>'
 })
