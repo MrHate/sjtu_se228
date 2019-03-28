@@ -168,7 +168,12 @@ Vue.component('all-list',{
 	props:['search_text'],
 	data:function(){
 		return{
-			bookList:books
+			bookList:books,
+			fff: function(text,e){
+				console.log(text);
+				if(typeof(text) == "undefined" || text == "")return true;
+				return e.name.includes(text);
+			}
 		}
 	},
 	template:'\
@@ -176,14 +181,14 @@ Vue.component('all-list',{
 			<table class="table">\
 				<thead>\
 				  <tr>\
-					<th scope="col">{{this.search_text}}#</th>\
+					<th scope="col">#</th>\
 					<th scope="col">Name</th>\
 					<th scope="col">Price</th>\
 					<th scope="col">Quantity</th>\
 				  </tr>\
 				</thead>\
 				<tbody>\
-				  <tr v-for="i in bookList">\
+				  <tr v-for="i in bookList.filter(this.fff.bind(null,this.search_text))">\
 					<th scope="row">{{i.id}}</th>\
 					<td>{{i.name}}</td>\
 					<td>{{i.price}}</td>\
