@@ -30,6 +30,7 @@
 				{path:'/detail/:id',component:{template:'<book-detail :book_id="$route.params.id"></book-detail>'}},
 				{path:'/all',component:{template:'<all-list></all-list>'}},
 				{path:'/all/:search',component:{template:'<all-list :search_text="$route.params.search"></all-list>'}},
+				{path:'/cart',component:{template:'<cart></cart>'}},
 				{path:'/',component:{template:'<book-list></book-list>'}}
 			]
 		})

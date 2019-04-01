@@ -78,7 +78,7 @@ Vue.component('footer-contents',{
 Vue.component('book-list',{
 	data:function() {
 		var t_books = [];
-		for(var i in books){
+		for(var i=0;i<3;i++){
 			var ent = {};
 			ent.id = books[i].id;
 			ent.name = books[i].name;
@@ -116,9 +116,7 @@ Vue.component('nav-menu',{
 				<ul class="nav nav-pills nav-stacked">\
 					<li><router-link class="side_nav_btn" to="/">Home</router-link></li>\
 					<li><router-link class="side_nav_btn" to="/all">All Books</router-link></li>\
-					<li><router-link class="side_nav_btn" to="">Cart</router-link></li>\
-					<li><router-link class="side_nav_btn" to="">Wishlist</router-link></li>\
-					<li><router-link class="side_nav_btn" to="">Contact</router-link></li>\
+					<li><router-link class="side_nav_btn" to="/cart">Cart</router-link></li>\
 				</ul>\
 			</div>\
 		</div>'
@@ -206,5 +204,28 @@ Vue.component('all-list',{
 				  </tr>\
 				</tbody>\
 		  </table>\
+	</div>'
+})
+
+Vue.component('cart',{
+	data:function(){
+		var t_books = [];
+		return{
+			bookList: t_books,
+		}
+	},
+	template:'\
+		<div>\
+			<table class="table">\
+				<thead>\
+				  <tr>\
+					<th scope="col">#</th>\
+					<th scope="col">Name</th>\
+					<th scope="col">Price</th>\
+					<th scope="col">Quantity</th>\
+				  </tr>\
+				</thead>\
+		  </table>\
+		  <button class="btn btn-default">Buy</button>\
 	</div>'
 })
