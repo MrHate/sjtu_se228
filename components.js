@@ -56,7 +56,7 @@ Vue.component('header-contents',{
 				<div class="navbar-header">\
 					<h3 class="navbar-brand" href="#">E-Book</h3>\
 					<input type="text" class="search" placeholder="Search" v-model="searchText"  />\
-					<button class="btn btn-default" @click="doSearch">search</button>\
+					<button class="search-btn" @click="doSearch"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>\
 				</div>\
 			</div>\
 			<div>\
@@ -167,10 +167,20 @@ Vue.component('book-detail',{
 Vue.component('all-list',{
 	props:['search_text'],
 	data:function(){
+		var t_books = [];
+		for(var i in books){
+			var ent = {};
+			ent.id = books[i].id;
+			ent.name = books[i].name;
+			ent.imgpath = 'images/'+ent.id+'.jpeg';
+			ent.route = '/detail/'+ent.id;
+			ent.price = books[i].price;
+			t_books.push(ent);
+		}
 		return{
-			bookList:books,
+			bookList: t_books,
 			fff: function(text,e){
-				console.log(text);
+				//console.log(text);
 				if(typeof(text) == "undefined" || text == "")return true;
 				return e.name.includes(text);
 			}
@@ -190,7 +200,7 @@ Vue.component('all-list',{
 				<tbody>\
 				  <tr v-for="i in bookList.filter(this.fff.bind(null,this.search_text))">\
 					<th scope="row">{{i.id}}</th>\
-					<td>{{i.name}}</td>\
+					<td><router-link :to="i.route">{{i.name}}</router-link></td>\
 					<td>{{i.price}}</td>\
 					<td>1</td>\
 				  </tr>\
