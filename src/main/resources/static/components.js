@@ -8,6 +8,16 @@ const books = [
 ];
 
 function get_book(id){
+	axios.get("ebookServlet",{
+		params:{
+			id:id
+		}
+	}).then(function (response) {
+		console.log(response.data);
+	}).catch(function (error) {
+		console.log(error);
+	});
+
 	return books[id];
 };
 
@@ -139,6 +149,15 @@ Vue.component('book-detail',{
 	methods:{
 		onClickBack:function(){
 			router.go(-1);
+		},
+		onClickCart:function(){
+			axios.post('ebookServlet', {
+				name: "idd"
+		    }).then(function (response) {
+				console.log(response);
+		    }).catch(function (error) {
+				console.log(error);
+	  	    });	
 		}
 	},
 	template:'\
@@ -151,7 +170,7 @@ Vue.component('book-detail',{
 						</div>\
 						<div class="panel-footer text-center">{{name}}</div>\
 					</div>\
-					<button class="btn btn-default" type="button">Add to Cart</button>\
+					<button class="btn btn-default" type="button" @click="onClickCart">Add to Cart</button>\
 					<button class="btn btn-default" type="button" @click="onClickBack">Back</button>\
 				</div>\
 				<div class="col-xs-8">\
