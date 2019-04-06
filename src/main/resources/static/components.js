@@ -65,18 +65,49 @@ Vue.component('footer-contents',{
 
 Vue.component('book-list',{
 	data:function() {
-		var t_books = [];
-		for(var i=0;i<3;i++){
-			var ent = {};
-			ent.id = books[i].id;
-			ent.name = books[i].name;
-			ent.imgpath = 'images/'+ent.id+'.jpeg';
-			ent.route = '/detail/'+ent.id;
-			ent.price = books[i].price;
-			t_books.push(ent);
-		}
 		return{
-			bookList: t_books
+			bookList: [],
+			list_len:0,
+			fetch_err:false
+		}
+	},
+	mounted:function(){
+		var i = 0;
+		this.fetchBook(-1).then(()=>{
+			while(i < 3 && this.fetch_err == false){
+				this.fetchBook(i);
+				++i;
+			}
+		});
+		this.fetch_err = false;
+	},
+	methods:{
+		fetchBook:function(id){
+			var self = this
+			return axios.get('ebookServlet',{
+				params:{
+					id:id
+				}
+			}).then((response)=>{
+				var id = response.data.id;
+				if(id == "-2"){
+					self.fetch_err = true;
+				}else if(id == "-1"){
+					var book_num = parseInt(response.data.book_num);
+					self.list_len = book_num;
+				}else{
+					var book = {};
+					book.id = response.data.id;
+					book.name = response.data.name;
+					book.price = response.data.price;
+					book.imgpath = 'images/'+book.id+'.jpeg';
+					book.route = '/detail/'+book.id;
+					this.bookList.push(book);
+				}
+			}).catch((error)=>{
+				console.log(error);
+				self.fetch_err = true;
+			});
 		}
 	},
 	template:'\
@@ -126,9 +157,7 @@ Vue.component('book-detail',{
 	},
 	mounted:function(){
 		var self = this;
-		self.fetchBook(this.book_id).then(function(){
-			console.log("fetchBook");
-		});
+		self.fetchBook(this.book_id);
 	},
 	methods:{
 		onClickBack:function(){
@@ -144,7 +173,6 @@ Vue.component('book-detail',{
 					id:id
 				}
 			}).then((response)=>{
-				console.log(response);
 				self.name = response.data.name;
 				self.subtitle = response.data.price;
 				self.content = response.data.description;
