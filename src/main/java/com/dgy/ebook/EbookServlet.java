@@ -30,12 +30,23 @@ public class EbookServlet extends HttpServlet {
                 {"admin", "$9","Now you see it."},
         };
 		String id = request.getParameter("id");
+		System.out.print("Get: ");
 		System.out.println(id);
 		int index = Integer.parseInt(id);
 		JSONObject obj = new JSONObject();
-		obj.put("name",books[index][0]);
-		obj.put("price",books[index][1]);
-		obj.put("description",books[index][2]);
+		if(index == -1){
+			obj.put("id","-1");
+			obj.put("book_num",String.valueOf(books.length));
+		}else{
+			if(index < books.length){
+				obj.put("id",id);
+				obj.put("name",books[index][0]);
+				obj.put("price",books[index][1]);
+				obj.put("description",books[index][2]);
+			}else{
+				obj.put("id","-2");
+			}
+		}
 		response.getWriter().append(obj.toString());
     }
 

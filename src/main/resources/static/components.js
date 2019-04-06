@@ -38,18 +38,6 @@ Vue.component('header-contents',{
 			});
 		}
 	},
-	//watch:{
-	//    searchText:function(){
-	//        //Replace search to search
-	//        var o_url = document.location.href;
-	//        if(o_url.search('search') != -1){
-	//            console.log(get_query("search"))
-	//        }
-	//        else{
-	//        }
-	//        //console.log(o_url.search('search') == -1);
-	//    }
-	//},
 	template:'\
 		<div>\
 			<div class="container-fluid header">\
@@ -147,13 +135,7 @@ Vue.component('book-detail',{
 			router.go(-1);
 		},
 		onClickCart:function(){
-			axios.post('ebookServlet', {
-				name: "idd"
-			}).then(function (response) {
-				console.log(response);
-			}).catch(function (error) {
-				console.log(error);
-			});	
+			this.fetchBook(-1);
 		},
 		fetchBook:function(id){
 			var self = this
@@ -196,23 +178,54 @@ Vue.component('book-detail',{
 Vue.component('all-list',{
 	props:['search_text'],
 	data:function(){
-		var t_books = [];
-		for(var i in books){
-			var ent = {};
-			ent.id = books[i].id;
-			ent.name = books[i].name;
-			ent.imgpath = 'images/'+ent.id+'.jpeg';
-			ent.route = '/detail/'+ent.id;
-			ent.price = books[i].price;
-			t_books.push(ent);
-		}
 		return{
-			bookList: t_books,
+			fetch_err:false,
+			list_len:0,
+			bookList: [],
 			fff: function(text,e){
 				//console.log(text);
 				if(typeof(text) == "undefined" || text == "")return true;
 				return e.name.includes(text);
 			}
+		}
+	},
+	mounted:function(){
+		var i = 0;
+		this.fetchBook(-1).then(()=>{
+			while(i < this.list_len && this.fetch_err == false){
+				this.fetchBook(i);
+				++i;
+			}
+		});
+		this.fetch_err = false;
+	},
+	methods:{
+		fetchBook:function(id){
+			var self = this
+			return axios.get('ebookServlet',{
+				params:{
+					id:id
+				}
+			}).then((response)=>{
+				var id = response.data.id;
+				if(id == "-2"){
+					self.fetch_err = true;
+				}else if(id == "-1"){
+					var book_num = parseInt(response.data.book_num);
+					self.list_len = book_num;
+				}else{
+					var book = {};
+					book.id = response.data.id;
+					book.name = response.data.name;
+					book.price = response.data.price;
+					book.imgpath = 'images/'+book.id+'.jpeg';
+					book.route = '/detail/'+book.id;
+					this.bookList.push(book);
+				}
+			}).catch((error)=>{
+				console.log(error);
+				self.fetch_err = true;
+			});
 		}
 	},
 	template:'\
