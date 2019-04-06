@@ -8,16 +8,6 @@ const books = [
 ];
 
 function get_book(id){
-	axios.get("ebookServlet",{
-		params:{
-			id:id
-		}
-	}).then(function (response) {
-		console.log(response.data);
-	}).catch(function (error) {
-		console.log(error);
-	});
-
 	return books[id];
 };
 
@@ -137,14 +127,20 @@ Vue.component('book-detail',{
 	props:['book_id'],
 	data:function(){
 		t_id = this.book_id;
-		t_book = get_book(t_id);
+		//t_book = get_book(t_id);
 		t_img = 'images/'+t_id+'.jpeg';
 		return {
-			name:t_book.name,
-			subtitle:t_book.price,
-			content:t_book.description,
+			name:"name",
+			subtitle:"subtitle",
+			content:"content",
 			image: t_img
 		}
+	},
+	mounted:function(){
+		var self = this;
+		self.fetchBook(this.book_id).then(function(){
+			console.log("fetchBook");
+		});
 	},
 	methods:{
 		onClickBack:function(){
@@ -153,11 +149,26 @@ Vue.component('book-detail',{
 		onClickCart:function(){
 			axios.post('ebookServlet', {
 				name: "idd"
-		    }).then(function (response) {
+			}).then(function (response) {
 				console.log(response);
-		    }).catch(function (error) {
+			}).catch(function (error) {
 				console.log(error);
-	  	    });	
+			});	
+		},
+		fetchBook:function(id){
+			var self = this
+			return axios.get('ebookServlet',{
+				params:{
+					id:id
+				}
+			}).then((response)=>{
+				console.log(response);
+				self.name = response.data.name;
+				self.subtitle = response.data.price;
+				self.content = response.data.description;
+			}).catch((error)=>{
+				console.log(error);
+			});
 		}
 	},
 	template:'\
