@@ -119,7 +119,7 @@ Vue.component('book-list',{
 							<img :src="i.imgpath" alt="pic" class="col-xs-1 list-img"/>\
 							<div class="col-xs-2">\
 								<h4>{{i.name}}</h4>\
-								<p class="col-xs-1">{{i.price}}</p>\
+								<p class="col-xs-1">$ {{i.price}}</p>\
 							</div>\
 						</div>\
 					</button>\
@@ -150,7 +150,7 @@ Vue.component('book-detail',{
 		t_img = 'images/'+t_id+'.jpeg';
 		return {
 			name:"name",
-			subtitle:"subtitle",
+			price:0,
 			content:"content",
 			image: t_img
 		}
@@ -174,7 +174,7 @@ Vue.component('book-detail',{
 				}
 			}).then((response)=>{
 				self.name = response.data.name;
-				self.subtitle = response.data.price;
+				self.price = response.data.price;
 				self.content = response.data.description;
 			}).catch((error)=>{
 				console.log(error);
@@ -196,7 +196,7 @@ Vue.component('book-detail',{
 				</div>\
 				<div class="col-xs-8">\
 					<h2>{{ name }}</h2>\
-					<h4>{{subtitle}}</h4>\
+					<h4>$ {{price}}</h4>\
 					<p>{{content}}</p>\
 				</div>\
 			</div>\
@@ -242,10 +242,12 @@ Vue.component('all-list',{
 					var book_num = parseInt(response.data.book_num);
 					self.list_len = book_num;
 				}else{
+					//console.log(response);
 					var book = {};
 					book.id = response.data.id;
 					book.name = response.data.name;
 					book.price = response.data.price;
+					book.quantity = response.data.quantity;
 					book.imgpath = 'images/'+book.id+'.jpeg';
 					book.route = '/detail/'+book.id;
 					this.bookList.push(book);
@@ -271,8 +273,8 @@ Vue.component('all-list',{
 				  <tr v-for="i in bookList.filter(this.fff.bind(null,this.search_text))">\
 					<th scope="row">{{i.id}}</th>\
 					<td><router-link :to="i.route">{{i.name}}</router-link></td>\
-					<td>{{i.price}}</td>\
-					<td>1</td>\
+					<td>$ {{i.price}}</td>\
+					<td>{{i.quantity}}</td>\
 				  </tr>\
 				</tbody>\
 		  </table>\

@@ -13,4 +13,11 @@ public class EbookApplicationTests {
 	public void contextLoads() {
 	}
 
+	@Test
+	public void dbUtilGetBooks(){
+		DbUtil.getInstance().getBooks();
+		DbUtil.getInstance().getBook(0);
+		DbUtil.getInstance().getBook(1);
+	}
+
 }
