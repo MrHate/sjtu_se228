@@ -28,11 +28,13 @@
 	<script>
 		var router = new VueRouter({
 			routes:[
+				{path:'/',component:{template:'<book-list></book-list>'}},
 				{path:'/detail/:id',component:{template:'<book-detail :book_id="$route.params.id"></book-detail>'}},
 				{path:'/all',component:{template:'<all-list></all-list>'}},
 				{path:'/all/:search',component:{template:'<all-list :search_text="$route.params.search"></all-list>'}},
 				{path:'/cart',component:{template:'<cart></cart>'}},
-				{path:'/',component:{template:'<book-list></book-list>'}}
+				{path:'/manage',component:{template:'<manage-list></manage-list>'}},
+				{path:'/modify/:id',component:{template:'<modify :book_id="$route.params.id"></modify>'}}
 			]
 		})
 		var vm = new Vue({

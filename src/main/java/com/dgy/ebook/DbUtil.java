@@ -91,5 +91,9 @@ public class DbUtil{
 		return books.get(0);
     }
 
+	public int getBookNum(){
+		String sql = "select count(*) from book";
+		return jdbcTemplate.queryForObject(sql,int.class);
+	}
 }
 

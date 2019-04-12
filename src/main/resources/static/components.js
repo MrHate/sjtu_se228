@@ -1,16 +1,3 @@
-const books = [
-	{id:0,name:"Jscom",price:"$10.99",description:"This is a book in black.Since the Sass port has a separate repo and serves a slightly different audience, the contents of the project differ greatly from the main Bootstrap project. This ensures the Sass port is as compatible with as many Sass-based systems as possible."},
-	{id:1,name:"Hacker",price:"$2.99",description:"If you are hacker.Using color to add meaning to a button only provides a visual indication, which will not be conveyed to users of assistive technologies – such as screen readers. Ensure that information denoted by the color is either obvious from the content itself (the visible text of the button), or is included through alternative means, such as additional text hidden with the .sr-only class."},
-	{id:2,name:"C++",price:"$13.99",description:"C++++++++++++++++."},
-	{id:3,name:"Touhou",price:"$11.99",description:"Where is Gensokyo."},
-	{id:4,name:"Hiii",price:"$4.99",description:"Hello world."},
-	{id:5,name:"Blue",price:"$9.99",description:"Blue means sadness."}
-];
-
-function get_book(id){
-	return books[id];
-};
-
 function get_query(name){
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
 	var r = window.location.search.substr(1).match(reg);
@@ -129,14 +116,20 @@ Vue.component('book-list',{
 });
 
 Vue.component('nav-menu',{
+	data:function(){
+		return{
+			isAdmin: get_query("username") == 'admin'
+		}
+	},
 	template:'\
 		<div>\
 			<div class="span2">\
 				<ul class="nav nav-pills nav-stacked">\
 					<li><router-link class="side_nav_btn" to="/">Home</router-link></li>\
 					<li><router-link class="side_nav_btn" to="/all">All Books</router-link></li>\
-					<li><router-link class="side_nav_btn" to="/cart">Cart</router-link></li>\
-					<li><router-link class="side_nav_btn" to="/orders">Orders</router-link></li>\
+					<li><router-link v-if="isAdmin" class="side_nav_btn" to="/manage">Manage</router-link></li>\
+					<li><router-link v-if="!isAdmin" class="side_nav_btn" to="/cart">Cart</router-link></li>\
+					<li><router-link v-if="!isAdmin" class="side_nav_btn" to="/orders">Orders</router-link></li>\
 				</ul>\
 			</div>\
 		</div>'
@@ -156,8 +149,7 @@ Vue.component('book-detail',{
 		}
 	},
 	mounted:function(){
-		var self = this;
-		self.fetchBook(this.book_id);
+		this.fetchBook(this.book_id);
 	},
 	methods:{
 		onClickBack:function(){
@@ -281,6 +273,89 @@ Vue.component('all-list',{
 	</div>'
 })
 
+Vue.component('manage-list',{
+	data:function(){
+		return{
+			fetch_err:false,
+			list_len:0,
+			bookList: [],
+			search_text: "",
+			fff: function(text,e){
+				//console.log(text);
+				if(typeof(text) == "undefined" || text == "")return true;
+				return e.name.includes(text);
+			}
+		}
+	},
+	mounted:function(){
+		var i = 0;
+		this.fetchBook(-1).then(()=>{
+			while(i < this.list_len && this.fetch_err == false){
+				this.fetchBook(i);
+				++i;
+			}
+		});
+		this.fetch_err = false;
+	},
+	methods:{
+		fetchBook:function(id){
+			var self = this
+			return axios.get('ebookServlet',{
+				params:{
+					id:id
+				}
+			}).then((response)=>{
+				var id = response.data.id;
+				if(id == "-2"){
+					self.fetch_err = true;
+				}else if(id == "-1"){
+					var book_num = parseInt(response.data.book_num);
+					self.list_len = book_num;
+				}else{
+					//console.log(response);
+					var book = {};
+					book.id = response.data.id;
+					book.name = response.data.name;
+					book.price = response.data.price;
+					book.quantity = response.data.quantity;
+					book.imgpath = 'images/'+book.id+'.jpeg';
+					book.route = '/modify/'+book.id;
+					this.bookList.push(book);
+				}
+			}).catch((error)=>{
+				console.log(error);
+				self.fetch_err = true;
+			});
+		}
+	},
+	template:'\
+		<div>\
+			<table class="table">\
+				<thead>\
+				  <tr>\
+					<th scope="col">#</th>\
+					<th scope="col">Name</th>\
+					<th scope="col">Price</th>\
+					<th scope="col">Quantity</th>\
+					<th scope="col"></th>\
+					<th scope="col"></th>\
+				  </tr>\
+				</thead>\
+				<tbody>\
+				  <tr v-for="i in bookList.filter(this.fff.bind(null,this.search_text))">\
+					<th scope="row">{{i.id}}</th>\
+					<td>{{i.name}}</td>\
+					<td>$ {{i.price}}</td>\
+					<td>{{i.quantity}}</td>\
+					<td><router-link :to="i.route">Modify</router-link></td>\
+					<td><router-link to="/">Delete</router-link></td>\
+				  </tr>\
+				</tbody>\
+		  </table>\
+		  <button class="btn btn-default">Create New Entry</button>\
+		</div>'
+})
+
 Vue.component('cart',{
 	data:function(){
 		var t_books = [];
@@ -302,4 +377,62 @@ Vue.component('cart',{
 		  </table>\
 		  <button class="btn btn-default">Buy</button>\
 	</div>'
+})
+
+Vue.component('modify',{
+	props:['book_id'],
+	data:function(){
+		return{
+			bookname:"",
+			price:"",
+			desp:"",
+			quantity:""
+		}
+	},
+	mounted:function(){
+		if(this.book_id != -1)this.fetchBook(this.book_id);
+	},
+	methods:{
+		fetchBook:function(id){
+			var self = this
+			return axios.get('ebookServlet',{
+				params:{
+					id:id
+				}
+			}).then((response)=>{
+				self.bookname = response.data.name;
+				self.price = response.data.price;
+				self.desp = response.data.description;
+				self.quantity = response.data.quantity;
+			}).catch((error)=>{
+				console.log(error);
+			});
+		}
+	},
+	template:'\
+		<div>\
+		  <form class="bs-example bs-example-form" role="form">\
+			<div class="input-group">\
+				<p>Book Name:</p>\
+				<input type="text" class="form-control" v-model="bookname">\
+			</div>\
+			<br>\
+			<div class="input-group">\
+				<p>Price:</p>\
+				<input type="text" class="form-control" v-model="price">\
+			</div>\
+			<br>\
+			<div class="input-group">\
+				<p>Quantity:</p>\
+				<input type="text" class="form-control" v-model="quantity">\
+			</div>\
+			<br>\
+			<div class="input-group">\
+				<p>Description:</p>\
+				<textarea class="form-control" v-model="desp" style="resize:none" rows="8" cols="60"></textarea>\
+			</div>\
+			<br>\
+		  	<button type="button" class="btn btn-default">Submit</button>\
+		  </form>\
+		</div>'
 })

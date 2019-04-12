@@ -14,10 +14,9 @@ public class EbookApplicationTests {
 	}
 
 	@Test
-	public void dbUtilGetBooks(){
+	public void dbTests(){
 		DbUtil.getInstance().getBooks();
-		DbUtil.getInstance().getBook(0);
-		DbUtil.getInstance().getBook(1);
+		DbUtil.getInstance().getBookNum();
 	}
 
 }

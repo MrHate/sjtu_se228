@@ -29,14 +29,16 @@ public class EbookServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("id");
 		//logger.info("Get :" + id);
+		DbUtil db = DbUtil.getInstance();
+		int book_num = db.getBookNum();
 		int index = Integer.parseInt(id);
 		JSONObject obj = new JSONObject();
 		if(index == -1){
 			obj.put("id","-1");
-			obj.put("book_num",String.valueOf(6));
+			obj.put("book_num",String.valueOf(book_num));
 		}else{
-			if(index < 6){
-				BookInfo book = DbUtil.getInstance().getBook(index);
+			if(index < book_num){
+				BookInfo book = db.getBook(index);
 				obj.put("id",id);
 				obj.put("name",book.name);
 				obj.put("price",book.price);
