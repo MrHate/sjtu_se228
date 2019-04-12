@@ -42,6 +42,17 @@ public class DbUtil{
 		instance.jdbcTemplate = this.jdbcTemplate;
 	}
 
+	public static class UserInfo{
+		public String username;
+		public String password;
+
+		public UserInfo(
+				String username_,
+				String password_){
+			username = username_;
+			password = password_;
+		}
+	}
 	public static class BookInfo{
 		public int id;
 		public String name;
@@ -138,5 +149,59 @@ public class DbUtil{
 		}
 		return id;
 	}
+
+	private List<UserInfo> getUsers(){
+        String sql = "select * from usr";
+        return (List<UserInfo>) jdbcTemplate.query(sql, new RowMapper<UserInfo>(){
+
+            @Override
+            public UserInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+				//logger.info("> getBooks() id: " + rs.getInt("id") + " name: " + rs.getString("name") );
+                UserInfo info = new UserInfo(
+						rs.getString("username"),
+						rs.getString("password"));
+                return info;
+            }
+
+        });
+    }
+
+	public boolean validateUser(String usr,String pwd){
+		List<UserInfo> list = getUsers();
+		for(UserInfo info : list){
+			if(info.username.equals(usr)){
+				if(info.password.equals(pwd))return true;
+				break;
+			}
+		}
+		return false;
+	}
+
+	public boolean createUser(String usr,String pwd){
+		List<UserInfo> list = getUsers();
+		for(UserInfo info : list){
+			if(info.username.equals(usr)){
+				return false;
+			}
+		}
+
+		jdbcTemplate.update("insert into usr values(?,?)",
+				new Object[]{usr,pwd});
+
+		return true;
+	}
+
+	public boolean removeUser(String usr){
+		List<UserInfo> list = getUsers();
+		for(UserInfo info : list){
+			if(info.username.equals(usr)){
+				jdbcTemplate.update("delete from usr where username=?",new Object[]{usr});
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 }
 
