@@ -407,6 +407,9 @@ Vue.component('modify',{
 			}).catch((error)=>{
 				console.log(error);
 			});
+		},
+		onClickSubmit:function(){
+			
 		}
 	},
 	template:'\
