@@ -326,6 +326,9 @@ Vue.component('manage-list',{
 				console.log(error);
 				self.fetch_err = true;
 			});
+		},
+		createNewEntry(){
+			router.push('/modify/-1');
 		}
 	},
 	template:'\
@@ -338,7 +341,6 @@ Vue.component('manage-list',{
 					<th scope="col">Price</th>\
 					<th scope="col">Quantity</th>\
 					<th scope="col"></th>\
-					<th scope="col"></th>\
 				  </tr>\
 				</thead>\
 				<tbody>\
@@ -348,11 +350,10 @@ Vue.component('manage-list',{
 					<td>$ {{i.price}}</td>\
 					<td>{{i.quantity}}</td>\
 					<td><router-link :to="i.route">Modify</router-link></td>\
-					<td><router-link to="/">Delete</router-link></td>\
 				  </tr>\
 				</tbody>\
 		  </table>\
-		  <button class="btn btn-default">Create New Entry</button>\
+		  <button class="btn btn-default" @click="createNewEntry">Create New Entry</button>\
 		</div>'
 })
 
@@ -416,8 +417,24 @@ Vue.component('modify',{
 			params.append("price",this.price);
 			params.append("quantity",this.quantity);
 			params.append("desp",this.desp);
+			if(this.book_id != -1){
+				params.append("opt","update");
+			}else{
+				params.append("opt","insert");
+			}
 			axios.post('ebookServlet',params).then((response)=>{
 				console.log(response);
+			}).catch((error)=>{
+				console.log(error);
+			});
+		},
+		onClickDelete:function(){
+			var params = new URLSearchParams();
+			params.append("id",this.book_id);
+			params.append("opt","remove");
+			axios.post('ebookServlet',params).then((response)=>{
+				console.log(response);
+				router.push('/manage');
 			}).catch((error)=>{
 				console.log(error);
 			});
@@ -447,6 +464,7 @@ Vue.component('modify',{
 			</div>\
 			<br>\
 		  	<button type="button" class="btn btn-default" @click="onClickSubmit">Submit</button>\
+		  	<button type="button" class="btn btn-default" v-if="this.book_id != -1" @click="onClickDelete">Delete</button>\
 		  </form>\
 		</div>'
 })

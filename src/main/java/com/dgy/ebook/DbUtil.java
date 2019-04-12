@@ -90,7 +90,7 @@ public class DbUtil{
 				return book;
 			}
 		}
-		return books.get(0);
+		return new BookInfo(-1,"_not_found_",0,0,"_not_found_");
     }
 
 	public int getBookNum(){
@@ -124,6 +124,19 @@ public class DbUtil{
 	public void removeBook(int id){
 		jdbcTemplate.update("delete from book where id=?",
 			new Object[]{id});
+	}
+
+	public int getUniqueID(){
+		List<BookInfo> books = getBooks();
+		ArrayList<Integer> arr = new ArrayList<Integer>();
+		for(BookInfo info : books){
+			arr.add(info.id);
+		}
+		int id = 1;
+		while(arr.contains(id)){
+			++id;
+		}
+		return id;
 	}
 }
 

@@ -39,7 +39,7 @@ public class EbookServlet extends HttpServlet {
 		}else{
 			if(index < book_num){
 				BookInfo book = db.getBook(index);
-				obj.put("id",id);
+				obj.put("id",book.id);
 				obj.put("name",book.name);
 				obj.put("price",book.price);
 				obj.put("description",book.desp);
@@ -53,18 +53,32 @@ public class EbookServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Writer out = response.getWriter();
+		DbUtil db = DbUtil.getInstance();
+
+		String opt = request.getParameter("opt");
 		int id = Integer.valueOf(request.getParameter("id"));
+		
+		if(opt.equals("remove")){
+			db.removeBook(id);
+			out.write("post: remove");
+			out.flush();
+			return;
+		}
+
 		String name = request.getParameter("name");
 		double price = Double.valueOf(request.getParameter("price"));
 		int quantity = Integer.valueOf(request.getParameter("quantity"));
 		String desp = request.getParameter("desp");
-
-		DbUtil db = DbUtil.getInstance();
+		if(id == -1){
+			id = db.getUniqueID();
+		}
 		BookInfo info = new BookInfo(id,name,price,quantity,desp);
-		db.updateBook(info);
+
+		if(opt.equals("update"))db.updateBook(info);
+		if(opt.equals("insert"))db.insertBook(info);
 		
-		Writer out = response.getWriter();
-		out.write("post");
+		out.write("post: " + opt);
 		out.flush();
 	}
 
