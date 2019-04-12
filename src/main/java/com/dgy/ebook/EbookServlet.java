@@ -53,18 +53,17 @@ public class EbookServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//response.setContentType("text/html;charset=utf-8");
-		//response.setHeader("Access-Control-Allow-Origin", "*");
-		//response.setHeader("Access-Control-Allow-Methods", "GET,POST");
-		Writer out = response.getWriter();
+		int id = Integer.valueOf(request.getParameter("id"));
+		String name = request.getParameter("name");
+		double price = Double.valueOf(request.getParameter("price"));
+		int quantity = Integer.valueOf(request.getParameter("quantity"));
+		String desp = request.getParameter("desp");
 
-		BufferedReader br = request.getReader();
-		String line = null;
-		StringBuilder sb = new StringBuilder();
-		while ((line = br.readLine()) != null) {
-			sb.append(line);
-			System.out.println(line);
-		}
+		DbUtil db = DbUtil.getInstance();
+		BookInfo info = new BookInfo(id,name,price,quantity,desp);
+		db.updateBook(info);
+		
+		Writer out = response.getWriter();
 		out.write("post");
 		out.flush();
 	}

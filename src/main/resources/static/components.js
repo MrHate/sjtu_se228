@@ -409,7 +409,18 @@ Vue.component('modify',{
 			});
 		},
 		onClickSubmit:function(){
-			
+			console.log("on button submit");
+			var params = new URLSearchParams();
+			params.append("id",this.book_id);
+			params.append("name",this.bookname);
+			params.append("price",this.price);
+			params.append("quantity",this.quantity);
+			params.append("desp",this.desp);
+			axios.post('ebookServlet',params).then((response)=>{
+				console.log(response);
+			}).catch((error)=>{
+				console.log(error);
+			});
 		}
 	},
 	template:'\
@@ -435,7 +446,7 @@ Vue.component('modify',{
 				<textarea class="form-control" v-model="desp" style="resize:none" rows="8" cols="60"></textarea>\
 			</div>\
 			<br>\
-		  	<button type="button" class="btn btn-default">Submit</button>\
+		  	<button type="button" class="btn btn-default" @click="onClickSubmit">Submit</button>\
 		  </form>\
 		</div>'
 })
