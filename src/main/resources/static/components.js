@@ -442,33 +442,65 @@ Vue.component('modify',{
 			}).catch((error)=>{
 				console.log(error);
 			});
+		},
+		onImgChange:function(event){
+			let file = event.target.files[0];
+			let reader = new FileReader();
+			let img = new Image();
+			reader.readAsDataURL(file);
+			reader.onloadend = (e)=>{
+				img.src = e.target.result;
+			}
+			let canvas = this.$refs['imgPreview']
+            let context = canvas.getContext('2d')
+            img.onload = () => {
+                img.width = 120
+                img.height = 160
+                canvas.width = 120
+                canvas.height = 160
+                context.clearRect(0, 0, 120, 160)
+                context.drawImage(img, 0, 0, 120, 160)
+            }
 		}
 	},
 	template:'\
 		<div>\
 		  <form class="bs-example bs-example-form" role="form">\
-			<div class="input-group">\
-				<p>Book Name:</p>\
-				<input type="text" class="form-control" v-model="bookname">\
+			<div class="container">\
+				<div class="col-xs-6">\
+					<div class="input-group">\
+						<p>Book Name:</p>\
+						<input type="text" class="form-control" v-model="bookname">\
+					</div>\
+					<br>\
+					<div class="input-group">\
+						<p>Price:</p>\
+						<input type="text" class="form-control" v-model="price">\
+					</div>\
+					<br>\
+					<div class="input-group">\
+						<p>Quantity:</p>\
+						<input type="text" class="form-control" v-model="quantity">\
+					</div>\
+					<br>\
+					<div class="input-group">\
+						<p>Description:</p>\
+						<textarea class="form-control" v-model="desp" style="resize:none" rows="8" cols="60"></textarea>\
+					</div>\
+					<br>\
+					<button type="button" class="btn btn-default" @click="onClickSubmit">Submit</button>\
+					<button type="button" class="btn btn-default" v-if="this.book_id != -1" @click="onClickDelete">Delete</button>\
+				</div>\
+				<div class="col-xs-4">\
+					<br>\
+					<p>Book Image:</p>\
+					<div class="panel panel-default" style="width:130px;height:170px">\
+						<canvas ref="imgPreview" height="100" width="100" style="padding:5px"></canvas>\
+					</div>\
+					<input type="file" accept="image/*" @change="onImgChange"/>\
+				</div>\
+				<br>\
 			</div>\
-			<br>\
-			<div class="input-group">\
-				<p>Price:</p>\
-				<input type="text" class="form-control" v-model="price">\
-			</div>\
-			<br>\
-			<div class="input-group">\
-				<p>Quantity:</p>\
-				<input type="text" class="form-control" v-model="quantity">\
-			</div>\
-			<br>\
-			<div class="input-group">\
-				<p>Description:</p>\
-				<textarea class="form-control" v-model="desp" style="resize:none" rows="8" cols="60"></textarea>\
-			</div>\
-			<br>\
-		  	<button type="button" class="btn btn-default" @click="onClickSubmit">Submit</button>\
-		  	<button type="button" class="btn btn-default" v-if="this.book_id != -1" @click="onClickDelete">Delete</button>\
 		  </form>\
 		</div>'
 })
