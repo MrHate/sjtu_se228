@@ -17,19 +17,19 @@ import org.slf4j.LoggerFactory;
 
 import com.dgy.ebook.DbUtil.BookInfo;
 
-@WebServlet(name = "ebookServlet", urlPatterns = "/ebookServlet")
-public class EbookServlet extends HttpServlet {
-    private Logger logger = LoggerFactory.getLogger(EbookServlet.class);
+@WebServlet(name = "bookManager", urlPatterns = "/bookManager")
+public class BookManager extends HttpServlet {
+    private Logger logger = LoggerFactory.getLogger(BookManager.class);
 
-	public EbookServlet(){
+	public BookManager(){
 		super();
 	}
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		DbUtil db = DbUtil.getInstance();
 		String id = request.getParameter("id");
 		//logger.info("Get :" + id);
-		DbUtil db = DbUtil.getInstance();
 		int book_num = db.getBookNum();
 		int index = Integer.parseInt(id);
 		JSONObject obj = new JSONObject();
@@ -53,33 +53,50 @@ public class EbookServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Writer out = response.getWriter();
 		DbUtil db = DbUtil.getInstance();
+		Writer out = response.getWriter();
 
-		String opt = request.getParameter("opt");
 		int id = Integer.valueOf(request.getParameter("id"));
 		
-		if(opt.equals("remove")){
-			db.removeBook(id);
-			out.write("post: remove");
-			out.flush();
-			return;
-		}
-
 		String name = request.getParameter("name");
 		double price = Double.valueOf(request.getParameter("price"));
 		int quantity = Integer.valueOf(request.getParameter("quantity"));
 		String desp = request.getParameter("desp");
-		if(id == -1){
-			id = db.getUniqueID();
-		}
 		BookInfo info = new BookInfo(id,name,price,quantity,desp);
 
-		if(opt.equals("update"))db.updateBook(info);
-		if(opt.equals("insert"))db.insertBook(info);
+		db.updateBook(info);
 		
-		out.write("post: " + opt);
+		out.write("post");
 		out.flush();
 	}
 
+	@Override
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		DbUtil db = DbUtil.getInstance();
+		Writer out = response.getWriter();
+		
+		String name = request.getParameter("name");
+		double price = Double.valueOf(request.getParameter("price"));
+		int quantity = Integer.valueOf(request.getParameter("quantity"));
+		String desp = request.getParameter("desp");
+		int	id = db.getUniqueID();
+		BookInfo info = new BookInfo(id,name,price,quantity,desp);
+
+		db.insertBook(info);
+		
+		out.write("put");
+		out.flush();
+	}
+
+	@Override
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		DbUtil db = DbUtil.getInstance();
+		Writer out = response.getWriter();
+		int id = Integer.valueOf(request.getParameter("id"));
+
+		db.removeBook(id);
+
+		out.write("delete");
+		out.flush();
+	}
 }

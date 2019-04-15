@@ -71,7 +71,7 @@ Vue.component('book-list',{
 	methods:{
 		fetchBook:function(id){
 			var self = this
-			return axios.get('ebookServlet',{
+			return axios.get('bookManager',{
 				params:{
 					id:id
 				}
@@ -160,7 +160,7 @@ Vue.component('book-detail',{
 		},
 		fetchBook:function(id){
 			var self = this
-			return axios.get('ebookServlet',{
+			return axios.get('bookManager',{
 				params:{
 					id:id
 				}
@@ -222,7 +222,7 @@ Vue.component('all-list',{
 	methods:{
 		fetchBook:function(id){
 			var self = this
-			return axios.get('ebookServlet',{
+			return axios.get('bookManager',{
 				params:{
 					id:id
 				}
@@ -300,7 +300,7 @@ Vue.component('manage-list',{
 	methods:{
 		fetchBook:function(id){
 			var self = this
-			return axios.get('ebookServlet',{
+			return axios.get('bookManager',{
 				params:{
 					id:id
 				}
@@ -396,7 +396,7 @@ Vue.component('modify',{
 	methods:{
 		fetchBook:function(id){
 			var self = this
-			return axios.get('ebookServlet',{
+			return axios.get('bookManager',{
 				params:{
 					id:id
 				}
@@ -418,21 +418,25 @@ Vue.component('modify',{
 			params.append("quantity",this.quantity);
 			params.append("desp",this.desp);
 			if(this.book_id != -1){
-				params.append("opt","update");
+				axios.post('bookManager',params).then((response)=>{
+					console.log(response);
+					router.push('/manage');
+				}).catch((error)=>{
+					console.log(error);
+				});
 			}else{
-				params.append("opt","insert");
+				axios.put('bookManager',params).then((response)=>{
+					console.log(response);
+					router.push('/manage');
+				}).catch((error)=>{
+					console.log(error);
+				});
 			}
-			axios.post('ebookServlet',params).then((response)=>{
-				console.log(response);
-			}).catch((error)=>{
-				console.log(error);
-			});
 		},
 		onClickDelete:function(){
 			var params = new URLSearchParams();
 			params.append("id",this.book_id);
-			params.append("opt","remove");
-			axios.post('ebookServlet',params).then((response)=>{
+			axios.delete('bookManager',{params:{id:this.book_id}}).then((response)=>{
 				console.log(response);
 				router.push('/manage');
 			}).catch((error)=>{
