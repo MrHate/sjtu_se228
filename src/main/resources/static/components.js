@@ -61,7 +61,7 @@ Vue.component('book-list',{
 	mounted:function(){
 		var i = 0;
 		this.fetchBook(-1).then(()=>{
-			while(i < 3 && this.fetch_err == false){
+			while(i < 1 && this.fetch_err == false){
 				this.fetchBook(i);
 				++i;
 			}
@@ -73,7 +73,8 @@ Vue.component('book-list',{
 			var self = this
 			return axios.get('bookManager',{
 				params:{
-					id:id
+					id:id,
+					img:true
 				}
 			}).then((response)=>{
 				var id = response.data.id;
@@ -88,6 +89,7 @@ Vue.component('book-list',{
 					book.name = response.data.name;
 					book.price = response.data.price;
 					book.imgpath = 'images/'+book.id+'.jpeg';
+					book.img = response.data.img;
 					book.route = '/detail/'+book.id;
 					this.bookList.push(book);
 				}
@@ -103,7 +105,7 @@ Vue.component('book-list',{
 				<router-link :to="i.route">\
 					<button class="btn btn-default book-entry">\
 						<div class="container" style="width:100%">\
-							<img :src="i.imgpath" alt="pic" class="col-xs-1 list-img"/>\
+							<img :src="i.img" alt="pic" class="col-xs-1 list-img"/>\
 							<div class="col-xs-2">\
 								<h4>{{i.name}}</h4>\
 								<p class="col-xs-1">$ {{i.price}}</p>\
@@ -384,10 +386,12 @@ Vue.component('modify',{
 	props:['book_id'],
 	data:function(){
 		return{
-			bookname:"",
-			price:"",
-			desp:"",
-			quantity:""
+			bookname:'',
+			price:'',
+			desp:'',
+			quantity:'',
+			imgBase64:'',
+			isUploadedImg:false
 		}
 	},
 	mounted:function(){
@@ -417,6 +421,8 @@ Vue.component('modify',{
 			params.append("price",this.price);
 			params.append("quantity",this.quantity);
 			params.append("desp",this.desp);
+			params.append("isUploadedImg",this.isUploadedImg);
+			params.append("img",this.imgBase64);
 			if(this.book_id != -1){
 				axios.post('bookManager',params).then((response)=>{
 					console.log(response);
@@ -450,10 +456,12 @@ Vue.component('modify',{
 			reader.readAsDataURL(file);
 			reader.onloadend = (e)=>{
 				img.src = e.target.result;
+				this.imgBase64 = reader.result;
 			}
 			let canvas = this.$refs['imgPreview']
             let context = canvas.getContext('2d')
             img.onload = () => {
+				this.isUploadedImg = true;
                 img.width = 120
                 img.height = 160
                 canvas.width = 120

@@ -29,6 +29,7 @@ public class BookManager extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DbUtil db = DbUtil.getInstance();
 		String id = request.getParameter("id");
+		String imgNeeded = request.getParameter("img");
 		//logger.info("Get :" + id);
 		int book_num = db.getBookNum();
 		int index = Integer.parseInt(id);
@@ -44,6 +45,9 @@ public class BookManager extends HttpServlet {
 				obj.put("price",book.price);
 				obj.put("description",book.desp);
 				obj.put("quantity",book.quantity);
+				if(imgNeeded != null){
+					obj.put("img",db.getImg(book.id));
+				}
 			}else{
 				obj.put("id","-2");
 			}
@@ -62,9 +66,14 @@ public class BookManager extends HttpServlet {
 		double price = Double.valueOf(request.getParameter("price"));
 		int quantity = Integer.valueOf(request.getParameter("quantity"));
 		String desp = request.getParameter("desp");
+		boolean isUploadedImg = Boolean.parseBoolean(request.getParameter("isUploadedImg"));
+		byte[] img = request.getParameter("img").getBytes();
 		BookInfo info = new BookInfo(id,name,price,quantity,desp);
 
 		db.updateBook(info);
+		if(isUploadedImg){
+			db.updateImg(id,img);
+		}
 		
 		out.write("post");
 		out.flush();
@@ -80,9 +89,14 @@ public class BookManager extends HttpServlet {
 		int quantity = Integer.valueOf(request.getParameter("quantity"));
 		String desp = request.getParameter("desp");
 		int	id = db.getUniqueID();
+		boolean isUploadedImg = Boolean.parseBoolean(request.getParameter("isUploadedImg"));
+		byte[] img = request.getParameter("img").getBytes();
 		BookInfo info = new BookInfo(id,name,price,quantity,desp);
 
 		db.insertBook(info);
+		if(isUploadedImg){
+			db.storeImg(id,img);
+		}
 		
 		out.write("put");
 		out.flush();

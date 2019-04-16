@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Base64;
+
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
@@ -143,7 +145,7 @@ public class DbUtil{
 		for(BookInfo info : books){
 			arr.add(info.id);
 		}
-		int id = 1;
+		int id = 0;
 		while(arr.contains(id)){
 			++id;
 		}
@@ -203,5 +205,33 @@ public class DbUtil{
 		return false;
 	}
 
+	public String getImg(int id){
+        String sql = "select img from image where id=?";
+
+		byte[] bytes = jdbcTemplate.queryForObject(sql,new Object[]{id},byte[].class);
+		return new String(bytes);
+	}
+
+	public boolean storeImg(int id,byte[] base64){
+		jdbcTemplate.update("insert into image values(?,?)",
+				new Object[]{id,base64});
+		return true;
+	}
+
+	public boolean updateImg(int id,byte[] base64){
+		jdbcTemplate.update("update image set img=? where id=?", new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setBytes(1, base64);
+                ps.setInt(2, id);
+            }
+        });
+
+		return true;
+	}
+
+	//public boolean removeImg(int id){
+	//    return true;
+	//}
 }
 
