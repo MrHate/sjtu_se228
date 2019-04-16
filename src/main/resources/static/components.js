@@ -88,10 +88,9 @@ Vue.component('book-list',{
 					book.id = response.data.id;
 					book.name = response.data.name;
 					book.price = response.data.price;
-					book.imgpath = 'images/'+book.id+'.jpeg';
 					book.img = response.data.img;
 					book.route = '/detail/'+book.id;
-					this.bookList.push(book);
+					if(book.id != -1)this.bookList.push(book);
 				}
 			}).catch((error)=>{
 				console.log(error);
@@ -164,12 +163,14 @@ Vue.component('book-detail',{
 			var self = this
 			return axios.get('bookManager',{
 				params:{
-					id:id
+					id:id,
+					img:true
 				}
 			}).then((response)=>{
 				self.name = response.data.name;
 				self.price = response.data.price;
 				self.content = response.data.description;
+				self.image = response.data.img;
 			}).catch((error)=>{
 				console.log(error);
 			});
@@ -242,9 +243,8 @@ Vue.component('all-list',{
 					book.name = response.data.name;
 					book.price = response.data.price;
 					book.quantity = response.data.quantity;
-					book.imgpath = 'images/'+book.id+'.jpeg';
 					book.route = '/detail/'+book.id;
-					this.bookList.push(book);
+					if(book.id != -1)this.bookList.push(book);
 				}
 			}).catch((error)=>{
 				console.log(error);
@@ -320,9 +320,8 @@ Vue.component('manage-list',{
 					book.name = response.data.name;
 					book.price = response.data.price;
 					book.quantity = response.data.quantity;
-					book.imgpath = 'images/'+book.id+'.jpeg';
 					book.route = '/modify/'+book.id;
-					this.bookList.push(book);
+					if(book.id != -1)this.bookList.push(book);
 				}
 			}).catch((error)=>{
 				console.log(error);
@@ -431,6 +430,10 @@ Vue.component('modify',{
 					console.log(error);
 				});
 			}else{
+				if(this.isUploadedImg == false){
+					alert("Please upload image.");
+					return;
+				}
 				axios.put('bookManager',params).then((response)=>{
 					console.log(response);
 					router.push('/manage');

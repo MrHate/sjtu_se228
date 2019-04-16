@@ -107,8 +107,8 @@ public class DbUtil{
     }
 
 	public int getBookNum(){
-		String sql = "select count(*) from book";
-		return jdbcTemplate.queryForObject(sql,int.class);
+		String sql = "select max(id) from book";
+		return jdbcTemplate.queryForObject(sql,int.class)+1;
 	}
 
 	public void updateBook(BookInfo info){

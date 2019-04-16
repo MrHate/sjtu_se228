@@ -45,7 +45,7 @@ public class BookManager extends HttpServlet {
 				obj.put("price",book.price);
 				obj.put("description",book.desp);
 				obj.put("quantity",book.quantity);
-				if(imgNeeded != null){
+				if(imgNeeded != null && book.id != -1){
 					obj.put("img",db.getImg(book.id));
 				}
 			}else{
