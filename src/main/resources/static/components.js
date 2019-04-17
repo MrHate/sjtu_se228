@@ -8,16 +8,21 @@ Vue.component('header-contents',{
 	data:function(){
 		return{
 			searchText:"",
-			username:get_query("username"),
-			password:""
+			username:""
 		}
 	},
+	mounted:function(){
+		this.fetchUser();
+	},
 	methods:{
-		logoutFun:function(){
-			this.username = "";
-			this.password = "";
-			document.location.href = "login.html";
-			//console.log(this.searchText);
+		fetchUser:function(){
+			return axios.get('userManager',
+			).then((response)=>{
+				this.username = response.data;
+			}).catch((error)=>{
+				console.log(error);
+				this.fetch_err = true;
+			});
 		},
 		doSearch:function(){
 			router.push({
@@ -37,7 +42,7 @@ Vue.component('header-contents',{
 			<div>\
 				<ul class="nav navbar-nav pull-right">\
 					<li class="active"><a href="#">{{username}}</a></li>\
-					<li><a href="#" @click="logoutFun">Log out</a></li>\
+					<li><a href="/logout" >Log out</a></li>\
 				</ul>\
 			</div>\
 		</div>'
@@ -119,7 +124,21 @@ Vue.component('book-list',{
 Vue.component('nav-menu',{
 	data:function(){
 		return{
-			isAdmin: get_query("username") == 'admin'
+			isAdmin: false
+		}
+	},
+	mounted:function(){
+		this.fetchUser();
+	},
+	methods:{
+		fetchUser:function(){
+			return axios.get('userManager',
+			).then((response)=>{
+				this.isAdmin = response.data == 'admin';
+			}).catch((error)=>{
+				console.log(error);
+				this.fetch_err = true;
+			});
 		}
 	},
 	template:'\
