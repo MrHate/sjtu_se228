@@ -190,15 +190,14 @@ public class DbUtil{
         });
     }
 
-	public boolean validateUser(String usr,String pwd){
+	public String getPasswordForUser(String usr){
 		List<UserInfo> list = getUsers();
 		for(UserInfo info : list){
 			if(info.username.equals(usr)){
-				if(info.password.equals(pwd))return true;
-				break;
+				return info.password;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	public boolean createUser(String usr,String pwd){

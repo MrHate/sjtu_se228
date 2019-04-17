@@ -30,5 +30,5 @@ create table image(
 -- insert into book values (4, 'JavaScript', 60,1,'Learn to use JS');
 -- insert into book values (5, 'Natural language processing', 80,1,'A way to use Java');
 
--- insert into usr values ('admin','admin');
--- insert into usr values ('test','123');
+insert into usr values ('admin','123');
+insert into usr values ('test','123');
