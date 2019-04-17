@@ -96,19 +96,41 @@ public class DbUtil{
     }
 
 	public BookInfo getBook(int id){
-        List<BookInfo> books = getBooks();
-		for(BookInfo book : books){
-			if(book.id == id){
-				//logger.info("> getBook() id: " + book.id + " name: " + book.name );
-				return book;
+        String sql = "select * from book where id=?";
+
+		return (BookInfo) jdbcTemplate.queryForObject(sql,new Object[]{id},new RowMapper<BookInfo>(){
+
+            @Override
+            public BookInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+				//logger.info("> getBooks() id: " + rs.getInt("id") + " name: " + rs.getString("name") );
+                BookInfo info = new BookInfo(
+						rs.getInt("id"),
+						rs.getString("name"),
+						rs.getBigDecimal("price").doubleValue(),
+						rs.getInt("quantity"),
+						rs.getString("desp"));
+                return info;
 			}
-		}
-		return new BookInfo(-1,"_not_found_",0,0,"_not_found_");
+		});	
+
+        //List<BookInfo> books = getBooks();
+		//for(BookInfo book : books){
+		//    if(book.id == id){
+		//        //logger.info("> getBook() id: " + book.id + " name: " + book.name );
+		//        return book;
+		//    }
+		//}
+		//return new BookInfo(-1,"_not_found_",0,0,"_not_found_");
     }
 
 	public int getBookNum(){
-		String sql = "select max(id) from book";
-		return jdbcTemplate.queryForObject(sql,int.class)+1;
+		try{
+			String sql = "select max(id) from book";
+			int res = jdbcTemplate.queryForObject(sql,int.class)+1;
+			return res;
+		}catch(Exception e){
+			return 0;
+		}
 	}
 
 	public void updateBook(BookInfo info){

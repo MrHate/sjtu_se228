@@ -139,14 +139,11 @@ Vue.component('nav-menu',{
 Vue.component('book-detail',{
 	props:['book_id'],
 	data:function(){
-		t_id = this.book_id;
-		//t_book = get_book(t_id);
-		t_img = 'images/'+t_id+'.jpeg';
 		return {
 			name:"name",
 			price:0,
 			content:"content",
-			image: t_img
+			image: ""
 		}
 	},
 	mounted:function(){
@@ -169,7 +166,7 @@ Vue.component('book-detail',{
 			}).then((response)=>{
 				self.name = response.data.name;
 				self.price = response.data.price;
-				self.content = response.data.description;
+				self.content = response.data.desp;
 				self.image = response.data.img;
 			}).catch((error)=>{
 				console.log(error);
