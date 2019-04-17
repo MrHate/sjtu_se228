@@ -16,7 +16,7 @@ Vue.component('header-contents',{
 	},
 	methods:{
 		fetchUser:function(){
-			return axios.get('userManager',
+			return axios.get('users/current',
 			).then((response)=>{
 				this.username = response.data;
 			}).catch((error)=>{
@@ -132,7 +132,7 @@ Vue.component('nav-menu',{
 	},
 	methods:{
 		fetchUser:function(){
-			return axios.get('userManager',
+			return axios.get('users/current',
 			).then((response)=>{
 				this.isAdmin = response.data == 'admin';
 			}).catch((error)=>{

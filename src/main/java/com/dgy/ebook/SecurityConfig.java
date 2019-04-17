@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception{
 		http.authorizeRequests()
 			//.antMatchers("/actuator").hasAuthority("SUPER_ADMIN")
-			//.antMatchers("/actuator/**").hasAuthority("SUPER_ADMIN")
+			.antMatchers("/users/register/**").permitAll()
 			.antMatchers("/login").permitAll()
 			.anyRequest().authenticated()
 			.and()
