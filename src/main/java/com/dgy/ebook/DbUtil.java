@@ -100,7 +100,7 @@ public class DbUtil{
 	public BookInfo getBook(int id){
         String sql = "select * from book where id=?";
 
-		return (BookInfo) jdbcTemplate.queryForObject(sql,new Object[]{id},new RowMapper<BookInfo>(){
+		BookInfo res = (BookInfo) jdbcTemplate.queryForObject(sql,new Object[]{id},new RowMapper<BookInfo>(){
 
             @Override
             public BookInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -117,6 +117,8 @@ public class DbUtil{
 			}
 		});	
 
+		logger.info("getBook "+res.name);
+		return res;
         //List<BookInfo> books = getBooks();
 		//for(BookInfo book : books){
 		//    if(book.id == id){

@@ -82,6 +82,7 @@ Vue.component('book-list',{
 					img:true
 				}
 			}).then((response)=>{
+				if(response.data == "failed to get"){return}
 				var id = response.data.id;
 				if(id == "-2"){
 					self.fetch_err = true;
@@ -252,6 +253,7 @@ Vue.component('all-list',{
 					id:id
 				}
 			}).then((response)=>{
+				if(response.data == "failed to get"){return}
 				var id = response.data.id;
 				if(id == "-2"){
 					self.fetch_err = true;
@@ -329,6 +331,8 @@ Vue.component('manage-list',{
 					id:id
 				}
 			}).then((response)=>{
+				console.log(response)
+				if(response.data == "failed to get"){return}
 				var id = response.data.id;
 				if(id == "-2"){
 					self.fetch_err = true;
@@ -343,7 +347,7 @@ Vue.component('manage-list',{
 					book.price = response.data.price;
 					book.quantity = response.data.quantity;
 					book.route = '/modify/'+book.id;
-					if(book.id != -1)this.bookList.push(book);
+					if(book.id != -3)this.bookList.push(book);
 				}
 			}).catch((error)=>{
 				console.log(error);
