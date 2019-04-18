@@ -162,7 +162,9 @@ Vue.component('book-detail',{
 			name:"name",
 			price:0,
 			content:"content",
-			image: ""
+			image: "",
+			isbn:"",
+			author:""
 		}
 	},
 	mounted:function(){
@@ -187,6 +189,8 @@ Vue.component('book-detail',{
 				self.price = response.data.price;
 				self.content = response.data.desp;
 				self.image = response.data.img;
+				self.isbn = response.data.isbn;
+				self.author = response.data.author;
 			}).catch((error)=>{
 				console.log(error);
 			});
@@ -208,6 +212,8 @@ Vue.component('book-detail',{
 				<div class="col-xs-8">\
 					<h2>{{ name }}</h2>\
 					<h4>$ {{price}}</h4>\
+					<h5>{{isbn}}</h5>\
+					<h5>{{author}}</h5>\
 					<p>{{content}}</p>\
 				</div>\
 			</div>\
@@ -406,24 +412,41 @@ Vue.component('modify',{
 			desp:'',
 			quantity:'',
 			imgBase64:'',
+			isbn:'',
+			author:'',
 			isUploadedImg:false
 		}
 	},
 	mounted:function(){
-		if(this.book_id != -1)this.fetchBook(this.book_id);
+		if(this.book_id == -1){return}
+		this.fetchBook(this.book_id);
 	},
 	methods:{
 		fetchBook:function(id){
 			var self = this
 			return axios.get('bookManager',{
 				params:{
-					id:id
+					id:id,
+					img:true
 				}
 			}).then((response)=>{
 				self.bookname = response.data.name;
 				self.price = response.data.price;
 				self.desp = response.data.description;
 				self.quantity = response.data.quantity;
+				self.imgBase64 = response.data.img;
+				self.author = response.data.author;
+				self.isbn = response.data.isbn;
+				let img = new Image();
+				img.src = this.imgBase64;
+				let canvas = this.$refs['imgPreview']
+				let context = canvas.getContext('2d')
+				img.width = 120
+				img.height = 160
+				canvas.width = 120
+				canvas.height = 160
+				context.clearRect(0, 0, 120, 160)
+				context.drawImage(img, 0, 0, 120, 160)
 			}).catch((error)=>{
 				console.log(error);
 			});
@@ -433,6 +456,8 @@ Vue.component('modify',{
 			var params = new URLSearchParams();
 			params.append("id",this.book_id);
 			params.append("name",this.bookname);
+			params.append("isbn",this.isbn);
+			params.append("author",this.author);
 			params.append("price",this.price);
 			params.append("quantity",this.quantity);
 			params.append("desp",this.desp);
@@ -498,6 +523,16 @@ Vue.component('modify',{
 					<div class="input-group">\
 						<p>Book Name:</p>\
 						<input type="text" class="form-control" v-model="bookname">\
+					</div>\
+					<br>\
+					<div class="input-group">\
+						<p>ISBN:</p>\
+						<input type="text" class="form-control" v-model="isbn">\
+					</div>\
+					<br>\
+					<div class="input-group">\
+						<p>Author:</p>\
+						<input type="text" class="form-control" v-model="author">\
 					</div>\
 					<br>\
 					<div class="input-group">\

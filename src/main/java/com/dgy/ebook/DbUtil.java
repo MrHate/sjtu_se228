@@ -1,27 +1,21 @@
 package com.dgy.ebook;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Base64;
-
 import java.math.BigDecimal;
-import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.PreparedStatementSetter;
-import javax.annotation.PostConstruct;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 @Component
 public class DbUtil{
@@ -58,6 +52,8 @@ public class DbUtil{
 	public static class BookInfo{
 		public int id;
 		public String name;
+		public String isbn;
+		public String author;
 		public double price;
 		public int quantity;
 		public String desp;
@@ -65,11 +61,15 @@ public class DbUtil{
 		public BookInfo(
 				int id_,
 				String name_,
+				String isbn_,
+				String author_,
 				double price_,
 				int quantity_,
 				String desp_){
 			id = id_;
 			name = name_;
+			isbn = isbn_;
+			author = author_;
 			price = price_;
 			quantity = quantity_;
 			desp = desp_;
@@ -86,6 +86,8 @@ public class DbUtil{
                 BookInfo info = new BookInfo(
 						rs.getInt("id"),
 						rs.getString("name"),
+						rs.getString("isbn"),
+						rs.getString("author"),
 						rs.getBigDecimal("price").doubleValue(),
 						rs.getInt("quantity"),
 						rs.getString("desp"));
@@ -106,6 +108,8 @@ public class DbUtil{
                 BookInfo info = new BookInfo(
 						rs.getInt("id"),
 						rs.getString("name"),
+						rs.getString("isbn"),
+						rs.getString("author"),
 						rs.getBigDecimal("price").doubleValue(),
 						rs.getInt("quantity"),
 						rs.getString("desp"));
@@ -134,23 +138,27 @@ public class DbUtil{
 	}
 
 	public void updateBook(BookInfo info){
-		jdbcTemplate.update("update book set name=?,price=?,quantity=?,desp=? where id=?", new PreparedStatementSetter() {
+		jdbcTemplate.update("update book set name=?,price=?,quantity=?,desp=?,isbn=?,author=? where id=?", new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, info.name);
                 ps.setBigDecimal(2, new BigDecimal(info.price));
 				ps.setInt(3,info.quantity);
 				ps.setString(4,info.desp);
-				ps.setInt(5,info.id);
+				ps.setString(5,info.isbn);
+				ps.setString(6,info.author);
+				ps.setInt(7,info.id);
             }
         });
 	}
 
 	public void insertBook(BookInfo info){
-		jdbcTemplate.update("insert into book values(?,?,?,?,?)",
+		jdbcTemplate.update("insert into book values(?,?,?,?,?,?,?)",
 				new Object[]{
 					info.id,
 					info.name,
+					info.isbn,
+					info.author,
 					new BigDecimal(info.price),
 					info.quantity,
 					info.desp});

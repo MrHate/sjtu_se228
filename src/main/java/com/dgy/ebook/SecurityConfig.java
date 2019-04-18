@@ -3,10 +3,8 @@ package com.dgy.ebook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +21,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.authorizeRequests()
-			//.antMatchers("/actuator").hasAuthority("SUPER_ADMIN")
+			//.antMatchers("/bookManager").hasAuthority("user")
+			//.antMatchers("/bookManager").permitAll()
 			.antMatchers("/users/register/**").permitAll()
 			.antMatchers("/login").permitAll()
 			.anyRequest().authenticated()
@@ -32,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.loginPage("/login").permitAll()
 			.and()
 			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
-	 
+	 	http.csrf().ignoringAntMatchers("/bookManager");
 	}
 
 	@Override
