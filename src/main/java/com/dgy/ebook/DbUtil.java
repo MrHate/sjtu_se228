@@ -17,6 +17,9 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.dgy.ebook.entity.UserInfo;
+import com.dgy.ebook.entity.BookInfo;
+
 @Component
 public class DbUtil{
     private Logger logger = LoggerFactory.getLogger(DbUtil.class);
@@ -38,44 +41,6 @@ public class DbUtil{
 		instance.jdbcTemplate = this.jdbcTemplate;
 	}
 
-	public static class UserInfo{
-		public String username;
-		public String password;
-
-		public UserInfo(
-				String username_,
-				String password_){
-			username = username_;
-			password = password_;
-		}
-	}
-	public static class BookInfo{
-		public int id;
-		public String name;
-		public String isbn;
-		public String author;
-		public double price;
-		public int quantity;
-		public String desp;
-
-		public BookInfo(
-				int id_,
-				String name_,
-				String isbn_,
-				String author_,
-				double price_,
-				int quantity_,
-				String desp_){
-			id = id_;
-			name = name_;
-			isbn = isbn_;
-			author = author_;
-			price = price_;
-			quantity = quantity_;
-			desp = desp_;
-		}
-	}
-
 	public List<BookInfo> getBooks(){
         String sql = "select * from book";
         return (List<BookInfo>) jdbcTemplate.query(sql, new RowMapper<BookInfo>(){
@@ -83,14 +48,14 @@ public class DbUtil{
             @Override
             public BookInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 				//logger.info("> getBooks() id: " + rs.getInt("id") + " name: " + rs.getString("name") );
-                BookInfo info = new BookInfo(
-						rs.getInt("id"),
-						rs.getString("name"),
-						rs.getString("isbn"),
-						rs.getString("author"),
-						rs.getBigDecimal("price").doubleValue(),
-						rs.getInt("quantity"),
-						rs.getString("desp"));
+                BookInfo info = new BookInfo();
+				info.setId(rs.getInt("id"));
+				info.setName(rs.getString("name"));
+				info.setIsbn(rs.getString("isbn"));
+				info.setAuthor(rs.getString("author"));
+				info.setPrice(rs.getBigDecimal("price").doubleValue());
+				info.setQuantity(rs.getInt("quantity"));
+				info.setDesp(rs.getString("desp"));
                 return info;
             }
 
@@ -105,28 +70,19 @@ public class DbUtil{
             @Override
             public BookInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 				//logger.info("> getBooks() id: " + rs.getInt("id") + " name: " + rs.getString("name") );
-                BookInfo info = new BookInfo(
-						rs.getInt("id"),
-						rs.getString("name"),
-						rs.getString("isbn"),
-						rs.getString("author"),
-						rs.getBigDecimal("price").doubleValue(),
-						rs.getInt("quantity"),
-						rs.getString("desp"));
+                BookInfo info = new BookInfo();
+				info.setId(rs.getInt("id"));
+				info.setName(rs.getString("name"));
+				info.setIsbn(rs.getString("isbn"));
+				info.setAuthor(rs.getString("author"));
+				info.setPrice(rs.getBigDecimal("price").doubleValue());
+				info.setQuantity(rs.getInt("quantity"));
+				info.setDesp(rs.getString("desp"));
                 return info;
 			}
 		});	
 
-		logger.info("getBook "+res.name);
 		return res;
-        //List<BookInfo> books = getBooks();
-		//for(BookInfo book : books){
-		//    if(book.id == id){
-		//        //logger.info("> getBook() id: " + book.id + " name: " + book.name );
-		//        return book;
-		//    }
-		//}
-		//return new BookInfo(-1,"_not_found_",0,0,"_not_found_");
     }
 
 	public int getBookNum(){
@@ -143,13 +99,13 @@ public class DbUtil{
 		jdbcTemplate.update("update book set name=?,price=?,quantity=?,desp=?,isbn=?,author=? where id=?", new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, info.name);
-                ps.setBigDecimal(2, new BigDecimal(info.price));
-				ps.setInt(3,info.quantity);
-				ps.setString(4,info.desp);
-				ps.setString(5,info.isbn);
-				ps.setString(6,info.author);
-				ps.setInt(7,info.id);
+                ps.setString(1, info.getName());
+                ps.setBigDecimal(2, new BigDecimal(info.getPrice()));
+				ps.setInt(3,info.getQuantity());
+				ps.setString(4,info.getDesp());
+				ps.setString(5,info.getIsbn());
+				ps.setString(6,info.getAuthor());
+				ps.setInt(7,info.getId());
             }
         });
 	}
@@ -157,13 +113,13 @@ public class DbUtil{
 	public void insertBook(BookInfo info){
 		jdbcTemplate.update("insert into book values(?,?,?,?,?,?,?)",
 				new Object[]{
-					info.id,
-					info.name,
-					info.isbn,
-					info.author,
-					new BigDecimal(info.price),
-					info.quantity,
-					info.desp});
+					info.getId(),
+					info.getName(),
+					info.getIsbn(),
+					info.getAuthor(),
+					new BigDecimal(info.getPrice()),
+					info.getQuantity(),
+					info.getDesp()});
 	}
 
 	public void removeBook(int id){
@@ -175,7 +131,7 @@ public class DbUtil{
 		List<BookInfo> books = getBooks();
 		ArrayList<Integer> arr = new ArrayList<Integer>();
 		for(BookInfo info : books){
-			arr.add(info.id);
+			arr.add(info.getId());
 		}
 		int id = 0;
 		while(arr.contains(id)){
@@ -191,9 +147,9 @@ public class DbUtil{
             @Override
             public UserInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 				//logger.info("> getBooks() id: " + rs.getInt("id") + " name: " + rs.getString("name") );
-                UserInfo info = new UserInfo(
-						rs.getString("username"),
-						rs.getString("password"));
+                UserInfo info = new UserInfo();
+				info.setUsername(rs.getString("username"));
+				info.setPassword(rs.getString("password"));
                 return info;
             }
 
@@ -203,8 +159,8 @@ public class DbUtil{
 	public String getPasswordForUser(String usr){
 		List<UserInfo> list = getUsers();
 		for(UserInfo info : list){
-			if(info.username.equals(usr)){
-				return info.password;
+			if(info.getUsername().equals(usr)){
+				return info.getPassword();
 			}
 		}
 		return null;
@@ -213,7 +169,7 @@ public class DbUtil{
 	public boolean createUser(String usr,String pwd){
 		List<UserInfo> list = getUsers();
 		for(UserInfo info : list){
-			if(info.username.equals(usr)){
+			if(info.getUsername().equals(usr)){
 				return false;
 			}
 		}
@@ -227,7 +183,7 @@ public class DbUtil{
 	public boolean removeUser(String usr){
 		List<UserInfo> list = getUsers();
 		for(UserInfo info : list){
-			if(info.username.equals(usr)){
+			if(info.getUsername().equals(usr)){
 				jdbcTemplate.update("delete from usr where username=?",new Object[]{usr});
 				return true;
 			}
@@ -260,9 +216,5 @@ public class DbUtil{
 
 		return true;
 	}
-
-	//public boolean removeImg(int id){
-	//    return true;
-	//}
 }
 

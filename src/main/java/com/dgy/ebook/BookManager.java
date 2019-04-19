@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dgy.ebook.DbUtil.BookInfo;
+import com.dgy.ebook.entity.BookInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,15 +40,15 @@ public class BookManager extends HttpServlet {
 			}else{
 				if(index < book_num){
 					BookInfo book = db.getBook(index);
-					obj.put("id",book.id);
-					obj.put("name",book.name);
-					obj.put("price",book.price);
-					obj.put("description",book.desp);
-					obj.put("quantity",book.quantity);
-					obj.put("isbn",book.isbn);
-					obj.put("author",book.author);
-					if(imgNeeded != null && book.id != -1){
-						obj.put("img",db.getImg(book.id));
+					obj.put("id",book.getId());
+					obj.put("name",book.getName());
+					obj.put("price",book.getPrice());
+					obj.put("description",book.getDesp());
+					obj.put("quantity",book.getQuantity());
+					obj.put("isbn",book.getIsbn());
+					obj.put("author",book.getAuthor());
+					if(imgNeeded != null && book.getId() != -1){
+						obj.put("img",db.getImg(book.getId()));
 					}
 				}else{
 					obj.put("id","-2");
@@ -75,7 +75,15 @@ public class BookManager extends HttpServlet {
 		String desp = request.getParameter("desp");
 		boolean isUploadedImg = Boolean.parseBoolean(request.getParameter("isUploadedImg"));
 		byte[] img = request.getParameter("img").getBytes();
-		BookInfo info = new BookInfo(id,name,isbn,author,price,quantity,desp);
+
+		BookInfo info = new BookInfo();
+		info.setId(id);
+		info.setName(name);
+		info.setIsbn(isbn);
+		info.setAuthor(author);
+		info.setPrice(price);
+		info.setQuantity(quantity);
+		info.setDesp(desp);
 
 		db.updateBook(info);
 		if(isUploadedImg){
@@ -100,7 +108,15 @@ public class BookManager extends HttpServlet {
 		int	id = db.getUniqueID();
 		boolean isUploadedImg = Boolean.parseBoolean(request.getParameter("isUploadedImg"));
 		byte[] img = request.getParameter("img").getBytes();
-		BookInfo info = new BookInfo(id,name,isbn,author,price,quantity,desp);
+
+		BookInfo info = new BookInfo();
+		info.setId(id);
+		info.setName(name);
+		info.setIsbn(isbn);
+		info.setAuthor(author);
+		info.setPrice(price);
+		info.setQuantity(quantity);
+		info.setDesp(desp);
 
 		db.insertBook(info);
 		if(isUploadedImg){
