@@ -10,15 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.dgy.ebook.entity.BookInfo;
+import com.dgy.ebook.service.BookService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import net.sf.json.JSONObject;
 
 @WebServlet(name = "bookManager", urlPatterns = "/bookManager")
 public class BookManager extends HttpServlet {
     private Logger logger = LoggerFactory.getLogger(BookManager.class);
+
+	@Autowired
+	private BookService bookService;
 
 	public BookManager(){
 		super();
@@ -27,11 +32,10 @@ public class BookManager extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
-			DbUtil db = DbUtil.getInstance();
 			String id = request.getParameter("id");
 			String imgNeeded = request.getParameter("img");
 			//logger.info("Get :" + id);
-			int book_num = db.getBookNum();
+			int book_num = bookService.getBookNum();
 			int index = Integer.parseInt(id);
 			JSONObject obj = new JSONObject();
 			if(index == -1){
@@ -39,7 +43,7 @@ public class BookManager extends HttpServlet {
 				obj.put("book_num",String.valueOf(book_num));
 			}else{
 				if(index < book_num){
-					BookInfo book = db.getBook(index);
+					BookInfo book = bookService.getBook(index);
 					obj.put("id",book.getId());
 					obj.put("name",book.getName());
 					obj.put("price",book.getPrice());
@@ -48,7 +52,7 @@ public class BookManager extends HttpServlet {
 					obj.put("isbn",book.getIsbn());
 					obj.put("author",book.getAuthor());
 					if(imgNeeded != null && book.getId() != -1){
-						obj.put("img",db.getImg(book.getId()));
+						obj.put("img",bookService.getImg(book.getId()));
 					}
 				}else{
 					obj.put("id","-2");
@@ -62,7 +66,6 @@ public class BookManager extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		DbUtil db = DbUtil.getInstance();
 		Writer out = response.getWriter();
 
 		int id = Integer.valueOf(request.getParameter("id"));
@@ -85,9 +88,9 @@ public class BookManager extends HttpServlet {
 		info.setQuantity(quantity);
 		info.setDesp(desp);
 
-		db.updateBook(info);
+		bookService.updateBook(info);
 		if(isUploadedImg){
-			db.updateImg(id,img);
+			bookService.updateImg(id,img);
 		}
 		
 		out.write("post");
@@ -96,7 +99,6 @@ public class BookManager extends HttpServlet {
 
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		DbUtil db = DbUtil.getInstance();
 		Writer out = response.getWriter();
 		
 		String name = request.getParameter("name");
@@ -105,7 +107,7 @@ public class BookManager extends HttpServlet {
 		double price = Double.valueOf(request.getParameter("price"));
 		int quantity = Integer.valueOf(request.getParameter("quantity"));
 		String desp = request.getParameter("desp");
-		int	id = db.getUniqueID();
+		int	id = bookService.getUniqueID();
 		boolean isUploadedImg = Boolean.parseBoolean(request.getParameter("isUploadedImg"));
 		byte[] img = request.getParameter("img").getBytes();
 
@@ -118,9 +120,9 @@ public class BookManager extends HttpServlet {
 		info.setQuantity(quantity);
 		info.setDesp(desp);
 
-		db.insertBook(info);
+		bookService.insertBook(info);
 		if(isUploadedImg){
-			db.storeImg(id,img);
+			bookService.storeImg(id,img);
 		}
 		
 		out.write("put");
@@ -129,11 +131,10 @@ public class BookManager extends HttpServlet {
 
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		DbUtil db = DbUtil.getInstance();
 		Writer out = response.getWriter();
 		int id = Integer.valueOf(request.getParameter("id"));
 
-		db.removeBook(id);
+		bookService.removeBook(id);
 
 		out.write("delete");
 		out.flush();

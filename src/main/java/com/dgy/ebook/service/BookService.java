@@ -1,4 +1,4 @@
-package com.dgy.ebook;
+package com.dgy.ebook.service;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
@@ -7,41 +7,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import com.dgy.ebook.entity.BookInfo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import com.dgy.ebook.entity.UserInfo;
-import com.dgy.ebook.entity.BookInfo;
-
-@Component
-public class DbUtil{
-    private Logger logger = LoggerFactory.getLogger(DbUtil.class);
-	private static DbUtil instance = new DbUtil();
-	
+@Service
+public class BookService{
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	private DbUtil(){
-	}
-
-	public static DbUtil getInstance(){
-		return instance;
-	}
-
-	@PostConstruct // To prevent jbcTemplate from a null pointer
-	public void init(){
-		instance = this;
-		instance.jdbcTemplate = this.jdbcTemplate;
-	}
-
-	public List<BookInfo> getBooks(){
+	public List<BookInfo> getBookList(){
         String sql = "select * from book";
         return (List<BookInfo>) jdbcTemplate.query(sql, new RowMapper<BookInfo>(){
 
@@ -122,13 +101,8 @@ public class DbUtil{
 					info.getDesp()});
 	}
 
-	public void removeBook(int id){
-		jdbcTemplate.update("delete from book where id=?",
-			new Object[]{id});
-	}
-
 	public int getUniqueID(){
-		List<BookInfo> books = getBooks();
+		List<BookInfo> books = getBookList();
 		ArrayList<Integer> arr = new ArrayList<Integer>();
 		for(BookInfo info : books){
 			arr.add(info.getId());
@@ -139,57 +113,10 @@ public class DbUtil{
 		}
 		return id;
 	}
-
-	private List<UserInfo> getUsers(){
-        String sql = "select * from usr";
-        return (List<UserInfo>) jdbcTemplate.query(sql, new RowMapper<UserInfo>(){
-
-            @Override
-            public UserInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-				//logger.info("> getBooks() id: " + rs.getInt("id") + " name: " + rs.getString("name") );
-                UserInfo info = new UserInfo();
-				info.setUsername(rs.getString("username"));
-				info.setPassword(rs.getString("password"));
-                return info;
-            }
-
-        });
-    }
-
-	public String getPasswordForUser(String usr){
-		List<UserInfo> list = getUsers();
-		for(UserInfo info : list){
-			if(info.getUsername().equals(usr)){
-				return info.getPassword();
-			}
-		}
-		return null;
-	}
-
-	public boolean createUser(String usr,String pwd){
-		List<UserInfo> list = getUsers();
-		for(UserInfo info : list){
-			if(info.getUsername().equals(usr)){
-				return false;
-			}
-		}
-
-		jdbcTemplate.update("insert into usr values(?,?)",
-				new Object[]{usr,pwd});
-
-		return true;
-	}
-
-	public boolean removeUser(String usr){
-		List<UserInfo> list = getUsers();
-		for(UserInfo info : list){
-			if(info.getUsername().equals(usr)){
-				jdbcTemplate.update("delete from usr where username=?",new Object[]{usr});
-				return true;
-			}
-		}
-
-		return false;
+	
+	public void removeBook(int id){
+		jdbcTemplate.update("delete from book where id=?",
+			new Object[]{id});
 	}
 
 	public String getImg(int id){
@@ -217,4 +144,3 @@ public class DbUtil{
 		return true;
 	}
 }
-

@@ -38,4 +38,30 @@ public class UserService{
 		}
 		return null;
 	}
+
+	public boolean createUser(String usr,String pwd){
+		List<UserInfo> list = getUserList();
+		for(UserInfo info : list){
+			if(info.getUsername().equals(usr)){
+				return false;
+			}
+		}
+
+		jdbcTemplate.update("insert into usr values(?,?)",
+				new Object[]{usr,pwd});
+
+		return true;
+	}
+
+	public boolean removeUser(String usr){
+		List<UserInfo> list = getUserList();
+		for(UserInfo info : list){
+			if(info.getUsername().equals(usr)){
+				jdbcTemplate.update("delete from usr where username=?",new Object[]{usr});
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
