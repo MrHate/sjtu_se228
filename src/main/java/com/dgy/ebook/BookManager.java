@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dgy.ebook.entity.BookImage;
 import com.dgy.ebook.entity.BookInfo;
 import com.dgy.ebook.service.BookService;
 
@@ -77,7 +78,6 @@ public class BookManager extends HttpServlet {
 		int quantity = Integer.valueOf(request.getParameter("quantity"));
 		String desp = request.getParameter("desp");
 		boolean isUploadedImg = Boolean.parseBoolean(request.getParameter("isUploadedImg"));
-		byte[] img = request.getParameter("img").getBytes();
 
 		BookInfo info = new BookInfo();
 		info.setId(id);
@@ -90,8 +90,12 @@ public class BookManager extends HttpServlet {
 
 		bookService.updateBook(info);
 		if(isUploadedImg){
-			bookService.updateImg(id,img);
+			BookImage img = new BookImage();
+			img.setId(id);
+			img.setImg(request.getParameter("img").getBytes());
+			bookService.updateImage(img);
 		}
+
 		
 		out.write("post");
 		out.flush();
@@ -107,12 +111,9 @@ public class BookManager extends HttpServlet {
 		double price = Double.valueOf(request.getParameter("price"));
 		int quantity = Integer.valueOf(request.getParameter("quantity"));
 		String desp = request.getParameter("desp");
-		int	id = bookService.getUniqueID();
 		boolean isUploadedImg = Boolean.parseBoolean(request.getParameter("isUploadedImg"));
-		byte[] img = request.getParameter("img").getBytes();
 
 		BookInfo info = new BookInfo();
-		info.setId(id);
 		info.setName(name);
 		info.setIsbn(isbn);
 		info.setAuthor(author);
@@ -120,9 +121,12 @@ public class BookManager extends HttpServlet {
 		info.setQuantity(quantity);
 		info.setDesp(desp);
 
-		bookService.insertBook(info);
+		bookService.updateBook(info);
 		if(isUploadedImg){
-			bookService.storeImg(id,img);
+			BookImage img = new BookImage();
+			img.setId(0);
+			img.setImg(request.getParameter("img").getBytes());
+			bookService.updateImage(img);
 		}
 		
 		out.write("put");
