@@ -124,7 +124,7 @@ public class BookManager extends HttpServlet {
 		bookService.updateBook(info);
 		if(isUploadedImg){
 			BookImage img = new BookImage();
-			img.setId(0);
+			img.setId(info.getId());
 			img.setImg(request.getParameter("img").getBytes());
 			bookService.updateImage(img);
 		}

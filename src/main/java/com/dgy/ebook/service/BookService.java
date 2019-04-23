@@ -42,13 +42,12 @@ public class BookService{
 	}
 
 	public String getImg(int id){
-		//byte[] bytes = imageRepository.findById(id).get().getImg();
-		//return new String(bytes);
-		return null;
+		byte[] bytes = imageRepository.findById(id).get().getImg();
+		return new String(bytes);
 	}
 
 	public boolean updateImage(BookImage img){
-		//imageRepository.save(img);
+		imageRepository.save(img);
 		return true;
 	}
 
