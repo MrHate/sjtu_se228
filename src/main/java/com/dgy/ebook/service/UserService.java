@@ -11,6 +11,15 @@ public class UserService{
 	@Autowired 
 	private UserRepository userRepository;
 
+	public int getIdForUser(String username){
+		int res = -1;
+
+		for(UserInfo n : userRepository.findByUsername(username)){
+			res = n.getId();
+		}
+		return res;
+	}
+
 	public String getPasswordForUser(String username){
 		String res = null;
 

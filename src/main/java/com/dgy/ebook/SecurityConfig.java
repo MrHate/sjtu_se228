@@ -25,13 +25,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			//.antMatchers("/bookManager").permitAll()
 			.antMatchers("/users/register/**").permitAll()
 			.antMatchers("/login").permitAll()
+			.antMatchers("/cart").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.formLogin()
 			.loginPage("/login").permitAll()
 			.and()
 			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
-	 	http.csrf().ignoringAntMatchers("/books");
+	 	http.csrf()
+			.ignoringAntMatchers("/books")
+			.ignoringAntMatchers("/cart");
 	}
 
 	@Override

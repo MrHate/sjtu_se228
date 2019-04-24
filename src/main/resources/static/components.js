@@ -176,7 +176,16 @@ Vue.component('book-detail',{
 			router.go(-1);
 		},
 		onClickCart:function(){
-			this.fetchBook(-1);
+			axios.get('users/current').then((response)=>{
+				console.log("username: "+response.data);
+				var params = new URLSearchParams();
+				params.append("username",response.data);
+				params.append("bid",this.book_id);
+				params.append("quantity",1);
+				axios.post('cart',params).then((response)=>{
+					alert("added to cart")
+				})
+			})
 		},
 		fetchBook:function(id){
 			var self = this
