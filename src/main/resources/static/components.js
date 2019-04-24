@@ -76,10 +76,10 @@ Vue.component('book-list',{
 	methods:{
 		fetchBook:function(id){
 			var self = this
-			return axios.get('bookManager',{
+			return axios.get('books',{
 				params:{
 					id:id,
-					img:true
+					withImg:true
 				}
 			}).then((response)=>{
 				if(response.data == "failed to get"){return}
@@ -180,10 +180,10 @@ Vue.component('book-detail',{
 		},
 		fetchBook:function(id){
 			var self = this
-			return axios.get('bookManager',{
+			return axios.get('books',{
 				params:{
 					id:id,
-					img:true
+					withImg:true
 				}
 			}).then((response)=>{
 				self.name = response.data.name;
@@ -248,9 +248,10 @@ Vue.component('all-list',{
 	methods:{
 		fetchBook:function(id){
 			var self = this
-			return axios.get('bookManager',{
+			return axios.get('books',{
 				params:{
-					id:id
+					id:id,
+					withImg:false
 				}
 			}).then((response)=>{
 				if(response.data == "failed to get"){return}
@@ -326,12 +327,12 @@ Vue.component('manage-list',{
 	methods:{
 		fetchBook:function(id){
 			var self = this
-			return axios.get('bookManager',{
+			return axios.get('books',{
 				params:{
-					id:id
+					id:id,
+					withImg:false
 				}
 			}).then((response)=>{
-				console.log(response)
 				if(response.data == "failed to get"){return}
 				var id = response.data.id;
 				if(id == "-2"){
@@ -428,10 +429,10 @@ Vue.component('modify',{
 	methods:{
 		fetchBook:function(id){
 			var self = this
-			return axios.get('bookManager',{
+			return axios.get('books',{
 				params:{
 					id:id,
-					img:true
+					withImg:true
 				}
 			}).then((response)=>{
 				self.bookname = response.data.name;
@@ -458,6 +459,7 @@ Vue.component('modify',{
 		onClickSubmit:function(){
 			console.log("on button submit");
 			var params = new URLSearchParams();
+			var book_info = new Object();
 			params.append("id",this.book_id);
 			params.append("name",this.bookname);
 			params.append("isbn",this.isbn);
@@ -465,32 +467,18 @@ Vue.component('modify',{
 			params.append("price",this.price);
 			params.append("quantity",this.quantity);
 			params.append("desp",this.desp);
-			params.append("isUploadedImg",this.isUploadedImg);
-			params.append("img",this.imgBase64);
-			if(this.book_id != -1){
-				axios.post('bookManager',params).then((response)=>{
-					console.log(response);
-					router.push('/manage');
-				}).catch((error)=>{
-					console.log(error);
-				});
-			}else{
-				if(this.isUploadedImg == false){
-					alert("Please upload image.");
-					return;
-				}
-				axios.put('bookManager',params).then((response)=>{
-					console.log(response);
-					router.push('/manage');
-				}).catch((error)=>{
-					console.log(error);
-				});
-			}
+			params.append("withImg",this.isUploadedImg);
+			if(this.isUploadedImg)params.append("img",this.imgBase64);
+			axios.post('books',params).then((response)=>{
+				router.push('/manage');
+			}).catch((error)=>{
+				console.log(error);
+			});
 		},
 		onClickDelete:function(){
 			var params = new URLSearchParams();
 			params.append("id",this.book_id);
-			axios.delete('bookManager',{params:{id:this.book_id}}).then((response)=>{
+			axios.delete('books',{params:{id:this.book_id}}).then((response)=>{
 				console.log(response);
 				router.push('/manage');
 			}).catch((error)=>{
