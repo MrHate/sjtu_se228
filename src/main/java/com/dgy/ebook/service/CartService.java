@@ -42,5 +42,12 @@ public class CartService{
 
 		return false;
 	}
+
+	public void deleteByUsername(String username){
+		for(CartItem item : repository.findByUsername(username)){
+			repository.deleteById(item.getId());
+		}
+	}
+
 }
 

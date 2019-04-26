@@ -1,9 +1,3 @@
-//function get_query(name){
-//    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-//    var r = window.location.search.substr(1).match(reg);
-//    if(r!=null)return unescape(r[2]); return null;
-//}
-
 Vue.component('header-contents',{
 	data:function(){
 		return{
@@ -12,18 +6,11 @@ Vue.component('header-contents',{
 		}
 	},
 	mounted:function(){
-		this.fetchUser();
+		axios.get('users/current').then((response)=>{
+			this.username = response.data
+		})
 	},
 	methods:{
-		fetchUser:function(){
-			return axios.get('users/current',
-			).then((response)=>{
-				this.username = response.data;
-			}).catch((error)=>{
-				console.log(error);
-				this.fetch_err = true;
-			});
-		},
 		doSearch:function(){
 			router.push({
 				path:`/all/${this.searchText}`,
@@ -150,7 +137,7 @@ Vue.component('nav-menu',{
 					<li><router-link class="side_nav_btn" to="/all">All Books</router-link></li>\
 					<li><router-link v-if="isAdmin" class="side_nav_btn" to="/manage">Manage</router-link></li>\
 					<li><router-link v-if="!isAdmin" class="side_nav_btn" to="/cart">Cart</router-link></li>\
-					<li><router-link v-if="!isAdmin" class="side_nav_btn" to="/orders">Orders</router-link></li>\
+					<li><router-link class="side_nav_btn" to="/orders">Orders</router-link></li>\
 				</ul>\
 			</div>\
 		</div>'
@@ -295,7 +282,7 @@ Vue.component('manage-list',{
 		});
 	},
 	methods:{
-		createNewEntry(){
+		createNewEntry:function(){
 			router.push('/modify/-1');
 		}
 	},
@@ -342,6 +329,13 @@ Vue.component('cart',{
 			})
 		});
 	},
+	methods:{
+		payForCart:function(){
+			axios.get('cart/clear',{params:{username:this.username}}).then((response)=>{
+				router.go(0)
+			})
+		}
+	},
 	template:'\
 		<div>\
 			<table class="table">\
@@ -362,7 +356,7 @@ Vue.component('cart',{
 				  </tr>\
 				</tbody>\
 		  </table>\
-		  <button class="btn btn-default">Buy</button>\
+		  <button class="btn btn-default" @click="payForCart">Buy</button>\
 	</div>'
 })
 

@@ -32,4 +32,10 @@ public class CartController{
 		cartService.deleteItem(username,bid);
 		return "delete";
 	}
+
+	@GetMapping(value="clear")
+	public String clearCart(@RequestParam String username){
+		cartService.deleteByUsername(username);
+		return "clear";
+	}
 }
