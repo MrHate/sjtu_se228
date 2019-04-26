@@ -61,10 +61,9 @@
 		</dependency>                           
 
 		<dependency>
-    		<groupId>net.sf.json-lib</groupId>
-    		<artifactId>json-lib</artifactId>
-    		<version>2.2.3</version>
-    		<classifier>jdk15</classifier>
+    		<groupId>com.alibaba</groupId>
+    		<artifactId>fastjson</artifactId>
+    		<version>1.2.57</version>
 		</dependency>
 	</dependencies>
 

@@ -1,5 +1,8 @@
 package com.dgy.ebook.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dgy.ebook.entity.BookImage;
 import com.dgy.ebook.entity.BookInfo;
 import com.dgy.ebook.repository.BookRepository;
@@ -14,6 +17,14 @@ public class BookService{
 	private BookRepository bookRepository;
 	@Autowired
 	private ImageRepository imageRepository;
+
+	public List<BookInfo> getBookList(){
+		ArrayList<BookInfo> res = new ArrayList();
+		for(BookInfo info : bookRepository.findAll()){
+			res.add(info);
+		}
+		return res;
+	}
 
 	public BookInfo getBook(int id){
 		return bookRepository.findById(id).get();

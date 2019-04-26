@@ -1,8 +1,8 @@
-function get_query(name){
-	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-	var r = window.location.search.substr(1).match(reg);
-	if(r!=null)return unescape(r[2]); return null;
-}
+//function get_query(name){
+//    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+//    var r = window.location.search.substr(1).match(reg);
+//    if(r!=null)return unescape(r[2]); return null;
+//}
 
 Vue.component('header-contents',{
 	data:function(){
@@ -245,14 +245,10 @@ Vue.component('all-list',{
 		}
 	},
 	mounted:function(){
-		var i = 0;
-		this.fetchBook(-1).then(()=>{
-			while(i < this.list_len && this.fetch_err == false){
-				this.fetchBook(i);
-				++i;
-			}
+		axios.get('books/all').then((response)=>{
+			console.log(response);
+			this.bookList = response.data;
 		});
-		this.fetch_err = false;
 	},
 	methods:{
 		fetchBook:function(id){
@@ -396,10 +392,20 @@ Vue.component('manage-list',{
 
 Vue.component('cart',{
 	data:function(){
-		var t_books = [];
 		return{
-			bookList: t_books,
+			username:'',
+			cart_list:[]
 		}
+	},
+	mounted:function(){
+		axios.get('users/current').then((response)=>{
+			this.username = response.data
+			axios.get('cart',{params:{username:this.username}}).then((response)=>{
+				console.log(response);
+				this.cart_list = response.data;
+				console.log(this.cart_list);
+			})
+		});
 	},
 	template:'\
 		<div>\
@@ -407,11 +413,19 @@ Vue.component('cart',{
 				<thead>\
 				  <tr>\
 					<th scope="col">#</th>\
-					<th scope="col">Name</th>\
+					<th scope="col">Book ID</th>\
 					<th scope="col">Price</th>\
 					<th scope="col">Quantity</th>\
 				  </tr>\
 				</thead>\
+				<tbody>\
+				  <tr v-for="i in cart_list">\
+					<th scope="row">{{i.id}}</th>\
+					<td>{{i.bid}}</td>\
+					<td>$ {{i.price}}</td>\
+					<td>{{i.quantity}}</td>\
+				  </tr>\
+				</tbody>\
 		  </table>\
 		  <button class="btn btn-default">Buy</button>\
 	</div>'
