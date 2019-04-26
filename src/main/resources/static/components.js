@@ -234,11 +234,8 @@ Vue.component('all-list',{
 	props:['search_text'],
 	data:function(){
 		return{
-			fetch_err:false,
-			list_len:0,
 			bookList: [],
 			fff: function(text,e){
-				//console.log(text);
 				if(typeof(text) == "undefined" || text == "")return true;
 				return e.name.includes(text);
 			}
@@ -246,41 +243,11 @@ Vue.component('all-list',{
 	},
 	mounted:function(){
 		axios.get('books/all').then((response)=>{
-			console.log(response);
-			this.bookList = response.data;
-		});
-	},
-	methods:{
-		fetchBook:function(id){
-			var self = this
-			return axios.get('books',{
-				params:{
-					id:id,
-					withImg:false
-				}
-			}).then((response)=>{
-				if(response.data == "failed to get"){return}
-				var id = response.data.id;
-				if(id == "-2"){
-					self.fetch_err = true;
-				}else if(id == "-1"){
-					var book_num = parseInt(response.data.book_num);
-					self.list_len = book_num;
-				}else{
-					//console.log(response);
-					var book = {};
-					book.id = response.data.id;
-					book.name = response.data.name;
-					book.price = response.data.price;
-					book.quantity = response.data.quantity;
-					book.route = '/detail/'+book.id;
-					if(book.id != -1)this.bookList.push(book);
-				}
-			}).catch((error)=>{
-				console.log(error);
-				self.fetch_err = true;
+			this.bookList = response.data.map((e)=>{
+				e.route = '/detail/'+e.id;
+				return e;
 			});
-		}
+		});
 	},
 	template:'\
 		<div>\
@@ -320,46 +287,14 @@ Vue.component('manage-list',{
 		}
 	},
 	mounted:function(){
-		var i = 0;
-		this.fetchBook(-1).then(()=>{
-			while(i < this.list_len && this.fetch_err == false){
-				this.fetchBook(i);
-				++i;
-			}
+		axios.get('books/all').then((response)=>{
+			this.bookList = response.data.map((e)=>{
+				e.route = '/modify/'+e.id;
+				return e;
+			});
 		});
-		this.fetch_err = false;
 	},
 	methods:{
-		fetchBook:function(id){
-			var self = this
-			return axios.get('books',{
-				params:{
-					id:id,
-					withImg:false
-				}
-			}).then((response)=>{
-				if(response.data == "failed to get"){return}
-				var id = response.data.id;
-				if(id == "-2"){
-					self.fetch_err = true;
-				}else if(id == "-1"){
-					var book_num = parseInt(response.data.book_num);
-					self.list_len = book_num;
-				}else{
-					//console.log(response);
-					var book = {};
-					book.id = response.data.id;
-					book.name = response.data.name;
-					book.price = response.data.price;
-					book.quantity = response.data.quantity;
-					book.route = '/modify/'+book.id;
-					if(book.id != -3)this.bookList.push(book);
-				}
-			}).catch((error)=>{
-				console.log(error);
-				self.fetch_err = true;
-			});
-		},
 		createNewEntry(){
 			router.push('/modify/-1');
 		}
