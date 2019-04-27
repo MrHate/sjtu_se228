@@ -1,4 +1,4 @@
-package com.dgy.ebook;
+package com.dgy.ebook.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,20 +20,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
-		http.authorizeRequests()
-			//.antMatchers("/bookManager").hasAuthority("user")
-			//.antMatchers("/bookManager").permitAll()
-			.antMatchers("/users/register/**").permitAll()
-			.antMatchers("/login").permitAll()
-			.anyRequest().authenticated()
-			.and()
+		http.cors().and()
+			.authorizeRequests()
+				.antMatchers("/users/register/**").permitAll()
+				.antMatchers("/login").permitAll()
+				.anyRequest().authenticated()
+				.and()
 			.formLogin()
-			.loginPage("/login").permitAll()
-			.and()
-			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
-	 	http.csrf()
-			.ignoringAntMatchers("/books")
-			.ignoringAntMatchers("/cart");
+				.loginPage("/unauthorized").permitAll()
+				.loginProcessingUrl("/login").permitAll()
+				.successForwardUrl("/loginsuccess")
+				.failureForwardUrl("/unauthorized").permitAll()
+				.and()
+			.logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.logoutSuccessUrl("/loginsuccess").permitAll();
+	 	http.csrf().disable();
 	}
 
 	@Override

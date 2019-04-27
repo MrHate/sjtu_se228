@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @RestController
 @RequestMapping(path="/cart")
 public class CartController{
@@ -29,7 +32,10 @@ public class CartController{
 
 	@DeleteMapping
 	public String removeCartItem(@RequestParam String username,@RequestParam int bid){
-		cartService.deleteItem(username,bid);
+		if(!cartService.deleteItem(username,bid)){
+			log.warn(">delete failed");
+		}
+
 		return "delete";
 	}
 

@@ -55,6 +55,12 @@ public class BookController{
 		}
 	}
 
+	@GetMapping(value="/image")
+	public String getBookImage(@RequestParam int id){
+		return bookService.getImg(id);
+	}
+
+
 	@PostMapping
 	public String updateBook(HttpServletRequest request,HttpServletResponse response){
 		int id = Integer.valueOf(request.getParameter("id"));
@@ -78,14 +84,12 @@ public class BookController{
 		info.setPrice(price);
 		info.setQuantity(quantity);
 		info.setDesp(desp);
-
 		bookService.updateBook(info);
-		if(withImg){
-			BookImage image = new BookImage();
-			image.setId(id);
-			image.setImg(request.getParameter("img").getBytes());
-			bookService.updateImage(image);
-		}
+
+		BookImage image = new BookImage();
+		image.setId(id);
+		image.setImg(request.getParameter("img").getBytes());
+		bookService.updateImage(image);
 		return "post";
 	}
 

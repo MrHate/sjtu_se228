@@ -8,6 +8,9 @@ import com.dgy.ebook.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class CartService{
 	@Autowired 
@@ -34,6 +37,7 @@ public class CartService{
 
 	public boolean deleteItem(String username,int bid){
 		for(CartItem item : repository.findByUsername(username)){
+			//log.info(">deleteItem find: "+item.getUsername()+"/"+item.getBid());
 			if(item.getBid() == bid){
 				repository.deleteById(item.getId());
 				return true;
