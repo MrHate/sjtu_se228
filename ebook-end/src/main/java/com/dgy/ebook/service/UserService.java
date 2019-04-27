@@ -29,7 +29,7 @@ public class UserService{
 		return res;
 	}
 
-	public boolean createUser(String username,String password){
+	public boolean createUser(String username,String password,String email){
 		for(UserInfo n : userRepository.findByUsername(username)){
 			return false;
 		}
@@ -37,9 +37,19 @@ public class UserService{
 		UserInfo n = new UserInfo();
 		n.setUsername(username);
 		n.setPassword(password);
+		n.setEmail(email);
+		n.setEnabled(true);
 		userRepository.save(n);
 
 		return true;
+	}
+
+	public void setUserEnabled(String username,boolean enabled){
+		for(UserInfo n : userRepository.findByUsername(username)){
+			n.setEnabled(enabled);
+			userRepository.save(n);
+			return;
+		}
 	}
 
 }

@@ -7,8 +7,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
@@ -18,9 +19,9 @@ public class UserController{
 	@Autowired
 	private UserService userService;
 
-	@GetMapping(value="/register/{s1}&{s2}",produces="application/json")
-	public boolean register(@PathVariable String s1,@PathVariable String s2){
-		return userService.createUser(s1,s2);
+	@PostMapping(value="/register",produces="application/json")
+	public boolean register(@RequestParam String username,@RequestParam String password,@RequestParam String email){
+		return userService.createUser(username,password,email);
 	}
 
 	@GetMapping(value="/current",produces="application/json")

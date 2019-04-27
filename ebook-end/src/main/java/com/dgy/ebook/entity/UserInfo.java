@@ -17,4 +17,8 @@ public class UserInfo{
 	private String username;
 
 	private String password;
+
+	private String email;
+
+	private boolean enabled;
 }
