@@ -32,4 +32,8 @@ public class UserController{
 		return userDetails.getUsername();
 	}
 
+	@GetMapping(value="/enabled")
+	public boolean isEnabled(){
+		return userService.isUserEnabled(getCurrentUsername());
+	}
 }

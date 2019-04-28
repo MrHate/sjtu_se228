@@ -1,13 +1,25 @@
 <template>
 <div>
-	<b-form-group label-cols-sm="2" label="Search here" class="mb-0">
-		<b-input-group>
-			<div class="w-25">
-				<b-form-input size="sm" class="mr-sm-2" v-model="searchText" placeholder="Type to Search"></b-form-input>
-			</div>
-		</b-input-group>
+	<b-form-group class="mb-0">
+		<b-container>
+			<b-row>
+				<b-col>
+					<b-form-input size="sm" class="mr-sm-2" v-model="searchText" placeholder="Search order list"></b-form-input>
+				</b-col>
+				<b-col>
+					<b-form-input type="date" size="sm" class="mr-sm-2" v-model="beginDate"></b-form-input>
+				</b-col>
+				<b-col>
+					<b-form-input type="date" size="sm" class="mr-sm-2" v-model="endDate"></b-form-input>
+				</b-col>
+				<b-col cols="2">
+					<b-button size="sm" class="mr-sm-2" @click="filterWithTime">filter with time</b-button>
+				</b-col>
+			</b-row>
+		</b-container>
 	</b-form-group>
-	<b-table :items="bookList" :fields="fields" :filter="searchText" striped>
+	<br>
+	<b-table :items="filteredList" :fields="fields" :filter="searchText" :sort-by.sync="sortBy" :sort-desc="sortDesc" striped>
 		<template v-if="isAdmin" slot="action" slot-scope="row">
 			<b-button size="sm" class="mr-1" @click="removeOrderItem(row.item.bid,row.item.username)">
 				Remove
@@ -24,9 +36,20 @@ export default {
 		return{
 			searchText:"",
 			bookList: [],
+			filteredList:[],
 			username:"",
 			isAdmin:false,
-			fields: ['time','bid','quantity','price'],
+			fields: [
+				{key:'time',sortable:true},
+				{key:'isbn',sortable:true},
+				{key:'bookname',sortable:true},
+				{key:'quantity',sortable:true},
+				{key:'price',sortable:true}
+			],
+			sortBy:'time',
+			sortDesc:false,
+			beginDate:null,
+			endDate:null
 		}
 	},
 	mounted:function(){
@@ -36,12 +59,14 @@ export default {
 			if(this.isAdmin){
 				this.axios.get('orders/all').then((response)=>{
 					this.bookList = response.data;
+					this.filteredList = this.bookList;
 				})
-				this.fields.push('username');
-				this.fields.push('action');
+				this.fields.push({key:'username',sortable:true});
+				this.fields.push({key:'action',sortable:false});
 			}else{
 				this.axios.get('orders',{params:{username:this.username}}).then((response)=>{
 					this.bookList = response.data;
+					this.filteredList = this.bookList;
 				})
 			}
 		});
@@ -58,6 +83,12 @@ export default {
 			params.append("bid",id);
 			params.append("quantity",quantity);
 			this.axios.post('orders',params);
+		},
+		filterWithTime(){
+			this.filteredList = this.bookList.filter((e)=>{
+				let d = e.time.substring(0,10);
+				return (d >= this.beginDate) && (d <= this.endDate);
+			});
 		}
 	}
 }

@@ -1,13 +1,14 @@
 <template>
 <div>
-	<b-form-group label-cols-sm="2" label="Search here" class="mb-0">
+	<b-form-group class="mb-0">
 		<b-input-group>
 			<div class="w-25">
-				<b-form-input size="sm" class="mr-sm-2" v-model="searchText" placeholder="Type to Search"></b-form-input>
+				<b-form-input size="sm" class="mr-sm-2" v-model="searchText" placeholder="Search manage list"></b-form-input>
 			</div>
 		</b-input-group>
 	</b-form-group>
-	<b-table :items="bookList" :fields="fields" :filter="searchText" striped>
+	<br>
+	<b-table :items="bookList" :sort-by.sync="sortBy" :sort-desc="sortDesc" :fields="fields" :filter="searchText" striped>
 		<template slot="action" slot-scope="row">
 			<b-button size="sm" class="mr-1" @click="viewDetail(row.item.id)">
 				View Detail
@@ -29,7 +30,16 @@ export default {
 			searchText:"",
 			bookList: [],
 			loadedImage:[],
-			fields: ['isbn','name','author','price','quantity', 'action'],
+			fields: [
+				{key:'isbn',sortable:true},
+				{key:'name',sortable:true},
+				{key:'author',sortable:true},
+				{key:'price',sortable:true},
+				{key:'quantity',sortable:true},
+				{key:'action',sortable:false}
+			],
+			sortBy:'time',
+			sortDesc:false,
 		}
 	},
 	mounted:function(){

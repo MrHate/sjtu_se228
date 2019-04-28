@@ -13,7 +13,6 @@
 			</b-form>
 		</div>
 		<b-nav pills>
-			<b-nav-item to="/">Home</b-nav-item>
 			<b-nav-item to="/all">All Books</b-nav-item>
 			<b-nav-item v-if="isAdmin&&isLogged" to="/manage">Manage</b-nav-item>
 			<b-nav-item v-if="!isAdmin&&isLogged" to="/cart">Cart</b-nav-item>

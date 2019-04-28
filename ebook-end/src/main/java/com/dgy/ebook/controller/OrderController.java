@@ -40,6 +40,7 @@ public class OrderController{
 			jobj.put("time",item.getFormatTime());
 			jobj.put("quantity",item.getQuantity());
 			jobj.put("price",item.getPrice());
+			jobj.put("date",item.getDate());
 			res.add(jobj.toJSONString());
 		}
 		return res.toString();

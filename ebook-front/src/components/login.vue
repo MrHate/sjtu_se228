@@ -41,8 +41,18 @@ export default {
 				data:this.$qs.stringify({'username':this.username,'password':this.password}),
 			}).then((response)=>{
 				if(response.data == 'success'){
-					this.$router.push('all');
-					this.$router.go(0);
+					this.axios.get('users/enabled').then((response)=>{
+						console.log(response);
+						if(response.data == false){
+							alert('this account is banned');
+							this.axios.post('logout').then(()=>{
+								this.$router.go(0);
+							});
+						}else{
+							this.$router.push('all');
+							this.$router.go(0);
+						}
+					});
 				}else{
 					alert("log in failed");
 				}

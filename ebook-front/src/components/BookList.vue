@@ -1,6 +1,6 @@
 <template>
 <div>
-	<b-table :items="bookList" :fields="fields" :filter="this.searchText" :current-page="currentPage" :perPage="perPage" striped>
+	<b-table :items="bookList" :sort-by.sync="sortBy" :sort-desc="sortDesc" :fields="fields" :filter="this.searchText" :current-page="currentPage" :perPage="perPage" striped>
 		<template slot="action" slot-scope="row">
 			<b-button size="sm" class="mr-1" @click="row.toggleDetails" @mouseover="fetchImage(row.item.id)">
 				{{ row.detailsShowing ? 'Hide' : 'Show' }} Details
@@ -48,7 +48,16 @@ export default {
 			currentPage:1,
 			perPage:5,
 			totalRows:0,
-			fields: ['isbn','name','author','price','quantity', 'action'],
+			fields: [
+				{key:'isbn',sortable:true},
+				{key:'name',sortable:true},
+				{key:'author',sortable:true},
+				{key:'price',sortable:true},
+				{key:'quantity',sortable:true},
+				{key:'action',sortable:false}
+			],
+			sortBy:'time',
+			sortDesc:false,
 		}
 	},
 	mounted:function(){

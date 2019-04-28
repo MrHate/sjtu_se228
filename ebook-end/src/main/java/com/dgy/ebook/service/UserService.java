@@ -52,4 +52,11 @@ public class UserService{
 		}
 	}
 
+	public boolean isUserEnabled(String username){
+		for(UserInfo n : userRepository.findByUsername(username)){
+			return n.isEnabled();
+		}
+		return false;
+	}
+
 }

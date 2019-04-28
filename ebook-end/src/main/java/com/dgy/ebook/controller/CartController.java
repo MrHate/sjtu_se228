@@ -84,7 +84,19 @@ public class CartController{
 	public String clearCart(@RequestParam String username){
 		for(CartItem ci : cartService.getCartForUser(username)){
 			BookInfo book = bookService.getBook(ci.getBid());
-			orderService.updateItem(username,ci.getBid(),ci.getQuantity(),ci.getQuantity() * book.getPrice());
+
+			int bquantity = book.getQuantity();
+			int cquantity = ci.getQuantity();
+			int oquantity = cquantity;
+			bquantity -= cquantity;
+
+			if(bquantity < 0){
+				oquantity += bquantity;
+				bquantity = 0;
+			}
+			book.setQuantity(bquantity);
+			bookService.updateBook(book);
+			orderService.updateItem(username,ci.getBid(),oquantity,ci.getQuantity() * book.getPrice());
 		}
 		cartService.deleteByUsername(username);
 		return "clear";

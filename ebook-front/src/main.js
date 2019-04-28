@@ -33,6 +33,7 @@ Vue.prototype.$qs = qs;
 Vue.config.productionTip = false
 
 const routes = [
+  { path: '/', component: BookList },
   { path: '/all', component: BookList },
   { path: '/all/:searchText', component: BookList, props:true },
   { path: '/cart', component: CartList },
