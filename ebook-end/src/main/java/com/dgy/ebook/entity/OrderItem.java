@@ -39,11 +39,14 @@ public class OrderItem{
 
 	@Override
 	public String toString(){
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		time = dateFormat.format(date.getTime());
+		time = getFormatTime();
 		return JSON.toJSONString(this);
 	}
 
+	public String getFormatTime(){
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return dateFormat.format(date.getTime());
+	}
 }
 
 

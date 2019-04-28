@@ -1,5 +1,9 @@
 package com.dgy.ebook.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.alibaba.fastjson.JSONObject;
 import com.dgy.ebook.entity.BookInfo;
 import com.dgy.ebook.entity.CartItem;
 import com.dgy.ebook.service.BookService;
@@ -27,9 +31,26 @@ public class CartController{
 	@Autowired
 	private BookService bookService;
 
+	private String joinBookInfo(List<CartItem> items){
+		ArrayList<String> res = new ArrayList();
+		for(CartItem item : items){
+			BookInfo book = bookService.getBook(item.getBid());
+			JSONObject jobj = new JSONObject();
+			jobj.put("id",item.getId());
+			jobj.put("bid",item.getBid());
+			jobj.put("username",item.getUsername());
+			jobj.put("bookname",book.getName());
+			jobj.put("isbn",book.getIsbn());
+			jobj.put("quantity",item.getQuantity());
+			jobj.put("price",book.getPrice());
+			res.add(jobj.toJSONString());
+		}
+		return res.toString();
+	}
+
 	@GetMapping
 	public String getCart(@RequestParam String username){
-		return cartService.getCartForUser(username).toString();
+		return joinBookInfo(cartService.getCartForUser(username));
 	}
 
 	@GetMapping(value="/add")

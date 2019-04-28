@@ -1,5 +1,12 @@
 package com.dgy.ebook.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.alibaba.fastjson.JSONObject;
+import com.dgy.ebook.entity.BookInfo;
+import com.dgy.ebook.entity.OrderItem;
+import com.dgy.ebook.service.BookService;
 import com.dgy.ebook.service.OrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +24,36 @@ import lombok.extern.log4j.Log4j2;
 public class OrderController{
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private BookService bookService;
+
+	private String joinBookInfo(List<OrderItem> items){
+		ArrayList<String> res = new ArrayList();
+		for(OrderItem item : items){
+			BookInfo book = bookService.getBook(item.getBid());
+			JSONObject jobj = new JSONObject();
+			jobj.put("id",item.getId());
+			jobj.put("bid",item.getBid());
+			jobj.put("username",item.getUsername());
+			jobj.put("bookname",book.getName());
+			jobj.put("isbn",book.getIsbn());
+			jobj.put("time",item.getFormatTime());
+			jobj.put("quantity",item.getQuantity());
+			jobj.put("price",item.getPrice());
+			res.add(jobj.toJSONString());
+		}
+		return res.toString();
+	}
+
 
 	@GetMapping
 	public String getOrdersForUser(@RequestParam String username){
-		return orderService.getOrderForUser(username).toString();
+		return joinBookInfo(orderService.getOrderForUser(username));
 	}
 
 	@GetMapping(value="/all")
 	public String getOrdersAll(){
-		return orderService.getOrdersAll().toString();
+		return joinBookInfo(orderService.getOrdersAll());
 	}
 
 	//@PostMapping
