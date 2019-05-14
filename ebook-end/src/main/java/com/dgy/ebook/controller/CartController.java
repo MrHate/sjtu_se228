@@ -73,10 +73,7 @@ public class CartController{
 
 	@DeleteMapping
 	public String removeCartItem(@RequestParam String username,@RequestParam int bid){
-		if(!cartService.deleteItem(username,bid)){
-			log.warn(">delete failed");
-		}
-
+		cartService.deleteItem(username,bid);
 		return "delete";
 	}
 

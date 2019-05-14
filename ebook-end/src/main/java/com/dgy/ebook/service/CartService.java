@@ -21,37 +21,22 @@ public class CartService{
 	}
 
 	public void updateItem(String username,int bid,int quantity){
-		CartItem ci = new CartItem();
-		for(CartItem item : repository.findByUsername(username)){
-			if(item.getBid() == bid){
-				ci = item;
-				break;
-			}
+		CartItem ci = repository.findByUsernameAndBid(username,bid);
+		if(ci == null){
+			ci = new CartItem();
+			ci.setUsername(username);
+			ci.setBid(bid);
 		}
-		ci.setUsername(username);
-		ci.setBid(bid);
 		ci.setQuantity(quantity);
-
 		repository.save(ci);
 	}
 
-	public boolean deleteItem(String username,int bid){
-		for(CartItem item : repository.findByUsername(username)){
-			//log.info(">deleteItem find: "+item.getUsername()+"/"+item.getBid());
-			if(item.getBid() == bid){
-				repository.deleteById(item.getId());
-				return true;
-			}
-		}
-
-		return false;
+	public void deleteItem(String username,int bid){
+		repository.deleteByUsernameAndBid(username,bid);
 	}
 
 	public void deleteByUsername(String username){
-		for(CartItem item : repository.findByUsername(username)){
-			repository.deleteById(item.getId());
-		}
+		repository.deleteByUsername(username);
 	}
-
 }
 
