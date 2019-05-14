@@ -13,12 +13,11 @@ public interface CartRepository extends JpaRepository<CartItem, Integer> {
 
 	List<CartItem> findByUsername(String username);
 
-	//@Query("select item from CartItem item where item.username = ?1 and item.bid = ?2")
 	CartItem findByUsernameAndBid(String username,int bid);
 
-	//@Query("delete from CartItem where username = ?1 and bid = ?2")
-	void deleteByUsernameAndBid(String username,int bid);
+	//@Query("delete from CartItem item where item.username = ?1 and item.bid = ?2")
+	//void deleteByUsernameAndBid(String username,int bid);
 
-	void deleteByUsername(String username);
+	//void deleteByUsername(String username);
 }
 
