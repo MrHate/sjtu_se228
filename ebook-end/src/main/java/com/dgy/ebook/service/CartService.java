@@ -1,5 +1,6 @@
 package com.dgy.ebook.service;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,6 +100,7 @@ public class CartService{
 			oi.setBid(ci.getBid());
 			oi.setQuantity(oquantity);
 			oi.setPrice(oquantity * book.getPrice());
+			oi.setDate(new Date());
 			orderRepository.save(oi);
 		}
 		cartRepository.deleteInBatch(cartRepository.findByUsername(username));
