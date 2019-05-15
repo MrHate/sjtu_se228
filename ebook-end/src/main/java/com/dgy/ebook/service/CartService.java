@@ -1,16 +1,17 @@
 package com.dgy.ebook.service;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dgy.ebook.entity.BookInfo;
 import com.dgy.ebook.entity.CartItem;
+import com.dgy.ebook.entity.OrderBatch;
 import com.dgy.ebook.entity.OrderItem;
 import com.dgy.ebook.repository.BookRepository;
 import com.dgy.ebook.repository.CartRepository;
-import com.dgy.ebook.repository.OrderRepository;
+import com.dgy.ebook.repository.OrderBatchRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class CartService{
 	@Autowired 
 	private CartRepository cartRepository;
 	@Autowired
-	private OrderRepository orderRepository;
+	private OrderBatchRepository orderRepository;
 	@Autowired
 	private BookRepository bookRepository;
 
@@ -80,6 +81,11 @@ public class CartService{
 	}
 
 	public boolean clearCart(String username){
+		OrderBatch ob = new OrderBatch();
+		ob.setUsername(username);
+		ob.setDate(new Date());
+		ArrayList<OrderItem> ois = new ArrayList<OrderItem>();
+
 		for(CartItem ci : cartRepository.findByUsername(username)){
 			BookInfo book = bookRepository.findById(ci.getBid()).get();
 
@@ -96,13 +102,22 @@ public class CartService{
 			bookRepository.save(book);
 			
 			OrderItem oi = new OrderItem();
-			oi.setUsername(username);
 			oi.setBid(ci.getBid());
 			oi.setQuantity(oquantity);
 			oi.setPrice(oquantity * book.getPrice());
-			oi.setDate(new Date());
-			orderRepository.save(oi);
+			oi.setOrderBatch(ob);
+			ois.add(oi);
+			
 		}
+
+		if(ois.isEmpty()){
+			return false;
+		}
+
+		log.info("> "+username+" clear cart with "+String.valueOf(ois.size())+" items");
+
+		ob.setItems(ois);
+		orderRepository.save(ob);
 		cartRepository.deleteInBatch(cartRepository.findByUsername(username));
 		
 		return true;
