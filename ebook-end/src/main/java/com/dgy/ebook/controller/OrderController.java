@@ -27,34 +27,14 @@ public class OrderController{
 	@Autowired
 	private BookService bookService;
 
-	private String joinBookInfo(List<OrderItem> items){
-		ArrayList<String> res = new ArrayList();
-		for(OrderItem item : items){
-			BookInfo book = bookService.getBook(item.getBid());
-			JSONObject jobj = new JSONObject();
-			jobj.put("id",item.getId());
-			jobj.put("bid",item.getBid());
-			jobj.put("username",item.getUsername());
-			jobj.put("bookname",book.getName());
-			jobj.put("isbn",book.getIsbn());
-			jobj.put("time",item.getFormatTime());
-			jobj.put("quantity",item.getQuantity());
-			jobj.put("price",item.getPrice());
-			jobj.put("date",item.getDate());
-			res.add(jobj.toJSONString());
-		}
-		return res.toString();
-	}
-
-
 	@GetMapping
 	public String getOrdersForUser(@RequestParam String username){
-		return joinBookInfo(orderService.getOrderForUser(username));
+		return orderService.getOrderForUser(username);
 	}
 
 	@GetMapping(value="/all")
 	public String getOrdersAll(){
-		return joinBookInfo(orderService.getOrdersAll());
+		return orderService.getOrdersAll();
 	}
 
 	//@PostMapping

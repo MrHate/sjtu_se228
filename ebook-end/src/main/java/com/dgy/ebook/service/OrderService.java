@@ -1,10 +1,13 @@
 package com.dgy.ebook.service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
+import com.dgy.ebook.entity.BookInfo;
 import com.dgy.ebook.entity.OrderItem;
+import com.dgy.ebook.repository.BookRepository;
 import com.dgy.ebook.repository.OrderRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +19,35 @@ import lombok.extern.log4j.Log4j2;
 @Service
 public class OrderService{
 	@Autowired 
-	private OrderRepository repository;
+	private OrderRepository orderRepository;
+	@Autowired
+	private BookRepository bookRepository;
 
-	public List<OrderItem> getOrderForUser(String username){
-		return repository.findByUsername(username);
+	private String joinBookInfo(List<OrderItem> items){
+		ArrayList<String> res = new ArrayList();
+		for(OrderItem item : items){
+			BookInfo book = bookRepository.findById(item.getBid()).get();
+			JSONObject jobj = new JSONObject();
+			jobj.put("id",item.getId());
+			jobj.put("bid",item.getBid());
+			jobj.put("username",item.getUsername());
+			jobj.put("bookname",book.getName());
+			jobj.put("isbn",book.getIsbn());
+			jobj.put("time",item.getFormatTime());
+			jobj.put("quantity",item.getQuantity());
+			jobj.put("price",item.getPrice());
+			jobj.put("date",item.getDate());
+			res.add(jobj.toJSONString());
+		}
+		return res.toString();
 	}
 
-	public List<OrderItem> getOrdersAll(){
-		ArrayList<OrderItem> res = new ArrayList();
-		for(OrderItem oi : repository.findAll()){
-			res.add(oi);
-		}
-		return res;
+	public String getOrderForUser(String username){
+		return joinBookInfo(orderRepository.findByUsername(username));
+	}
+
+	public String getOrdersAll(){
+		return joinBookInfo(orderRepository.findAll());
 	}
 	public void updateItem(String username,int bid,int quantity,double price){
 		OrderItem ci = new OrderItem();
@@ -37,14 +57,14 @@ public class OrderService{
 		ci.setPrice(price);
 		ci.setDate(new Date());
 
-		repository.save(ci);
+		orderRepository.save(ci);
 	}
 
 	public boolean deleteItem(String username,int bid){
-		for(OrderItem item : repository.findByUsername(username)){
+		for(OrderItem item : orderRepository.findByUsername(username)){
 			//log.info(">deleteItem find: "+item.getUsername()+"/"+item.getBid());
 			if(item.getBid() == bid){
-				repository.deleteById(item.getId());
+				orderRepository.deleteById(item.getId());
 				return true;
 			}
 		}
@@ -53,11 +73,9 @@ public class OrderService{
 	}
 
 	public void deleteByUsername(String username){
-		for(OrderItem item : repository.findByUsername(username)){
-			repository.deleteById(item.getId());
+		for(OrderItem item : orderRepository.findByUsername(username)){
+			orderRepository.deleteById(item.getId());
 		}
 	}
 
 }
-
-
