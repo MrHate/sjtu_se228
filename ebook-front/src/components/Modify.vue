@@ -114,17 +114,31 @@
 				}
 			},
 			submitInfo(){
-				var params = new URLSearchParams();
-				params.append("id",this.id);
-				params.append("name",this.name);
-				params.append("isbn",this.isbn);
-				params.append("author",this.author);
-				params.append("price",this.price);
-				params.append("quantity",this.quantity);
-				params.append("desp",this.description);
-				params.append("img",this.image);
-				this.axios.post('books',params).then(()=>{
-					this.$router.push('/manage');
+				this.axios({
+					method:"post",
+					url:'books',
+					headers:{'Content-Type': 'application/json'},
+					data:({
+						id:this.id,
+						name:this.name,
+						isbn:this.isbn,
+						author:this.author,
+						price:this.price,
+						quantity:this.quantity,
+						desp:this.description
+					})
+				}).then((response)=>{
+					this.axios({
+						method:"post",
+						url:'books/image',
+						headers:{'Content-Type': 'application/json'},
+						data:{
+							id:response.data,
+							img:this.image
+						}
+					}).then(()=>{
+						this.$router.push('/manage');
+					})
 				});
 			}
 		}

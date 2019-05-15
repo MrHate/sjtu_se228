@@ -3,7 +3,7 @@
 	<b-navbar variant="light">
 		<b-navbar-brand href="#">E-Book</b-navbar-brand>
 		<div class="w-50">
-			<b-form>
+			<b-form v-if="isLogged">
 			<b-input-group>
 				<b-form-input size="sm" class="mr-sm-2" placeholder="Search" v-model="searchText"></b-form-input>
 				<b-input-group-append>
@@ -12,13 +12,13 @@
 			</b-input-group>
 			</b-form>
 		</div>
-		<b-nav pills>
+		<b-nav  v-if="isLogged" pills>
 			<b-nav-item to="/all">All Books</b-nav-item>
-			<b-nav-item v-if="isAdmin&&isLogged" to="/manage">Manage</b-nav-item>
-			<b-nav-item v-if="!isAdmin&&isLogged" to="/cart">Cart</b-nav-item>
-			<b-nav-item v-if="isLogged" to="/orders">Orders</b-nav-item>
+			<b-nav-item v-if="isAdmin" to="/manage">Manage</b-nav-item>
+			<b-nav-item v-if="!isAdmin" to="/cart">Cart</b-nav-item>
+			<b-nav-item to="/orders">Orders</b-nav-item>
 			<b-nav-item disabled>{{username}}</b-nav-item>
-			<b-nav-item v-if="isLogged" @click="sendLogout">Log out</b-nav-item>
+			<b-nav-item @click="sendLogout">Log out</b-nav-item>
 		</b-nav>
 	</b-navbar>
 </div>

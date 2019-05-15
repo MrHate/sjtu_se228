@@ -3,6 +3,7 @@ package com.dgy.ebook.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dgy.ebook.entity.BookImage;
 import com.dgy.ebook.entity.BookInfo;
 import com.dgy.ebook.repository.BookRepository;
@@ -25,21 +26,32 @@ public class BookService{
 		}
 		return res;
 	}
-
+	
 	public BookInfo getBook(int id){
 		return bookRepository.findById(id).get();
-    }
-
-	public int getBookNum(){
-		int res = 0;
-		for(BookInfo info : bookRepository.findAll()){
-			res = info.getId();
-		}
-		return res;
 	}
 
-	public void updateBook(BookInfo info){
-		bookRepository.save(info);
+	public String getBookWithImageAsJSON(int id,boolean withImg){
+		BookInfo book = bookRepository.findById(id).get();
+		if(book == null)return "not found";
+
+		JSONObject obj = new JSONObject();
+		obj.put("id",book.getId());
+		obj.put("name",book.getName());
+		obj.put("price",book.getPrice());
+		obj.put("description",book.getDesp());
+		obj.put("quantity",book.getQuantity());
+		obj.put("isbn",book.getIsbn());
+		obj.put("author",book.getAuthor());
+		if(withImg){
+			obj.put("img",getImg(book.getId()));
+		}
+
+		return obj.toJSONString();
+    }
+
+	public BookInfo updateBook(BookInfo info){
+		return bookRepository.save(info);
 	}
 
 	public void removeBook(int id){
@@ -48,8 +60,8 @@ public class BookService{
 	}
 
 	public String getImg(int id){
-		byte[] bytes = imageRepository.findById(id).get().getImg();
-		return new String(bytes);
+		String bytes = imageRepository.findById(id).get().getImg();
+		return bytes;
 	}
 
 	public boolean updateImage(BookImage img){

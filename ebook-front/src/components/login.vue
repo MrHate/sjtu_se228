@@ -42,7 +42,6 @@ export default {
 			}).then((response)=>{
 				if(response.data == 'success'){
 					this.axios.get('users/enabled').then((response)=>{
-						console.log(response);
 						if(response.data == false){
 							alert('this account is banned');
 							this.axios.post('logout').then(()=>{

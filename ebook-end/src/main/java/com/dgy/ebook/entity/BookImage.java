@@ -13,6 +13,6 @@ public class BookImage{
 	private int id;
 
 	@Column(length=100000)
-	private byte[] img;
+	private String img;
 }
 
