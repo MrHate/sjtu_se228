@@ -27,10 +27,6 @@ public class BookService{
 		return res;
 	}
 	
-	public BookInfo getBook(int id){
-		return bookRepository.findById(id).get();
-	}
-
 	public String getBookWithImageAsJSON(int id,boolean withImg){
 		BookInfo book = bookRepository.findById(id).get();
 		if(book == null)return "not found";
