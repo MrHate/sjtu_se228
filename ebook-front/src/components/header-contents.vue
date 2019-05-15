@@ -42,7 +42,7 @@ export default {
 				this.isLogged = true;
 				this.isAdmin = (this.username == 'admin');
 			}else{
-				this.$router.push('login');
+				this.$router.to('login');
 				this.isLogged = false;
 				this.isAdmin = false;
 			}
@@ -51,7 +51,7 @@ export default {
 	methods:{
 		doSearch:function(evt){
 			evt.preventDefault()
-			this.$router.push({
+			this.$router.to({
 				path:`/all/${this.searchText}`,
 			});
 		},
