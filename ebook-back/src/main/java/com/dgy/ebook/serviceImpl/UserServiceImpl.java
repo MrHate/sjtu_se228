@@ -1,5 +1,7 @@
 package com.dgy.ebook.serviceImpl;
 
+import java.util.List;
+
 import com.dgy.ebook.entity.UserInfo;
 import com.dgy.ebook.repository.UserRepository;
 import com.dgy.ebook.service.UserService;
@@ -11,6 +13,10 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService{
 	@Autowired 
 	private UserRepository userRepository;
+
+	public List<UserInfo> getAllUsers(){
+		return userRepository.findAll();
+	}
 
 	public int getIdForUser(String username){
 		int res = -1;

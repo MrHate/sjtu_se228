@@ -1,6 +1,9 @@
 package com.dgy.ebook.controller;
 
+import com.dgy.ebook.entity.UserInfo;
 import com.dgy.ebook.service.UserService;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +22,11 @@ public class UserController{
 	@Autowired
 	private UserService userService;
 
+	@GetMapping(value="/all")
+	public List<UserInfo> getAllUsers(){
+		return userService.getAllUsers();
+	}
+
 	@PostMapping(value="/register",produces="application/json")
 	public boolean register(@RequestParam String username,@RequestParam String password,@RequestParam String email){
 		return userService.createUser(username,password,email);
@@ -35,5 +43,11 @@ public class UserController{
 	@GetMapping(value="/enabled")
 	public boolean isEnabled(){
 		return userService.isUserEnabled(getCurrentUsername());
+	}
+
+	@GetMapping(value="/set-user-enabled")
+	public boolean setEnabled(@RequestParam String username,@RequestParam boolean enabled){
+		userService.setUserEnabled(username,enabled);
+		return true;
 	}
 }

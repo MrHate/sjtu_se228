@@ -14,7 +14,8 @@
 		</div>
 		<b-nav  v-if="isLogged" pills>
 			<b-nav-item to="/all">All Books</b-nav-item>
-			<b-nav-item v-if="isAdmin" to="/manage">Manage</b-nav-item>
+			<b-nav-item v-if="isAdmin" to="/book-manage">Book Manage</b-nav-item>
+			<b-nav-item v-if="isAdmin" to="/user-manage">User Manage</b-nav-item>
 			<b-nav-item v-if="!isAdmin" to="/cart">Cart</b-nav-item>
 			<b-nav-item to="/orders">Orders</b-nav-item>
 			<b-nav-item disabled>{{username}}</b-nav-item>

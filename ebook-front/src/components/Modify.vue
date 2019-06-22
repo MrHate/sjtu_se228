@@ -137,7 +137,7 @@
 							img:this.image
 						}
 					}).then(()=>{
-						this.$router.to('/manage');
+						this.$router.push('/manage');
 					})
 				});
 			}

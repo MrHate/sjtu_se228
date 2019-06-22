@@ -44,7 +44,8 @@ export default {
 				{key:'isbn',sortable:true},
 				{key:'bookname',sortable:true},
 				{key:'quantity',sortable:true},
-				{key:'price',sortable:true}
+				{key:'price',sortable:true},
+				{key:'orderid',sortable:true},
 			],
 			sortBy:'time',
 			sortDesc:false,

@@ -16,6 +16,7 @@ import BookList from './components/BookList.vue'
 import CartList from './components/CartList.vue'
 import OrderList from './components/OrderList.vue'
 import ManageList from './components/ManageList.vue'
+import UserManage from './components/UserManage.vue'
 
 import Modify from './components/Modify.vue'
 
@@ -38,7 +39,8 @@ const routes = [
   { path: '/all/:searchText', component: BookList, props:true },
   { path: '/cart', component: CartList },
   { path: '/orders', component: OrderList },
-  { path: '/manage', component: ManageList },
+  { path: '/book-manage', component: ManageList },
+  { path: '/user-manage', component: UserManage },
   { path: '/modify/:bookid', component: Modify, props:true },
   { path: '/login', component: Login },
   { path: '/register', component: Register }
