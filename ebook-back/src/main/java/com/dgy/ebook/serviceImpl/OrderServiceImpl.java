@@ -15,10 +15,7 @@ import com.dgy.ebook.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
-@Log4j2
 public class OrderServiceImpl implements OrderService{
 	@Autowired 
 	private OrderRepository orderItemRepository;
@@ -30,7 +27,6 @@ public class OrderServiceImpl implements OrderService{
 	private String joinBookInfo(List<OrderBatch> batchs){
 		ArrayList<String> res = new ArrayList();
 		for(OrderBatch batch : batchs){
-			log.info("batch have "+String.valueOf(batch.getItems().size())+" items");
 			for(OrderItem item : batch.getItems()){
 				BookInfo book = bookRepository.findById(item.getBid()).get();
 				JSONObject jobj = new JSONObject();

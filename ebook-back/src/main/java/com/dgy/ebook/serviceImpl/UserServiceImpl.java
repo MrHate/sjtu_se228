@@ -40,6 +40,13 @@ public class UserServiceImpl implements UserService{
 		n.setPassword(password);
 		n.setEmail(email);
 		n.setEnabled(true);
+
+		int id = 1;
+		while(userRepository.existsById(id)){
+			++id;
+		}
+		n.setId(id);
+
 		userRepository.save(n);
 
 		return true;
