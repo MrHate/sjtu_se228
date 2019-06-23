@@ -16,7 +16,7 @@ public class AdminConfig {
 	void createAdminAccount(){
 		if(userRepository.findByUsername("admin").isEmpty()){
 			UserInfo admin = new UserInfo();
-			admin.setId(0);
+			admin.setId(1);
 			admin.setUsername("admin");
 			admin.setPassword("123");
 			admin.setEnabled(true);

@@ -52,7 +52,7 @@
 					</b-col>
 					<b-col sm="2">
 						<b-card style="height:180px">
-							<img :src="image" style="width:100%;height:100%" />
+							<img :src="image" style="width:110px;height:140px" />
 						</b-card>
 						<input type="file" accept="image/*" @change="onImgChange"/>
 					</b-col>

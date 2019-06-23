@@ -18,11 +18,27 @@ public class UserServiceImpl implements UserService{
 		return userRepository.findAll();
 	}
 
+	public UserInfo getUserInfo(String username){
+		for(UserInfo n : userRepository.findByUsername(username)){
+			return n;
+		}
+		return null;
+	}
+
 	public int getIdForUser(String username){
 		int res = -1;
 
 		for(UserInfo n : userRepository.findByUsername(username)){
 			res = n.getId();
+		}
+		return res;
+	}
+
+	public String getAvatarForUser(String username){
+		String res = null;
+
+		for(UserInfo n : userRepository.findByUsername(username)){
+			res = n.getAvatar();
 		}
 		return res;
 	}
@@ -47,7 +63,7 @@ public class UserServiceImpl implements UserService{
 		n.setEmail(email);
 		n.setEnabled(true);
 
-		int id = 1;
+		int id = 2;
 		while(userRepository.existsById(id)){
 			++id;
 		}
@@ -73,5 +89,22 @@ public class UserServiceImpl implements UserService{
 		return false;
 	}
 
+	public void updateUserAvatar(String username,String avatar){
+		for(UserInfo n : userRepository.findByUsername(username)){
+			n.setAvatar(avatar);
+			userRepository.save(n);
+			return;
+		}
+	}
+
+	public boolean updateUserPassword(String username,String password,String newPassword){
+		for(UserInfo n : userRepository.findByUsername(username)){
+			if(!n.getPassword().equals(password)){return false;}
+			n.setPassword(newPassword);
+			userRepository.save(n);
+			return true;
+		}
+		return false;
+	}
 }
 

@@ -19,6 +19,7 @@ import ManageList from './components/ManageList.vue'
 import UserManage from './components/UserManage.vue'
 
 import Modify from './components/Modify.vue'
+import Profile from './components/Profile.vue'
 
 import Login from './components/login.vue'
 import Register from './components/signup.vue'
@@ -42,6 +43,7 @@ const routes = [
   { path: '/book-manage', component: ManageList },
   { path: '/user-manage', component: UserManage },
   { path: '/modify/:bookid', component: Modify, props:true },
+  { path: '/profile', component: Profile},
   { path: '/login', component: Login },
   { path: '/register', component: Register }
 ]
