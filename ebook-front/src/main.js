@@ -14,6 +14,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import BookList from './components/BookList.vue'
 import CartList from './components/CartList.vue'
+import Purchased from './components/Purchased.vue'
 import OrderList from './components/OrderList.vue'
 import ManageList from './components/ManageList.vue'
 import UserManage from './components/UserManage.vue'
@@ -39,6 +40,7 @@ const routes = [
   { path: '/all', component: BookList },
   { path: '/all/:searchText', component: BookList, props:true },
   { path: '/cart', component: CartList },
+  { path: '/purchased', component: Purchased },
   { path: '/orders', component: OrderList },
   { path: '/book-manage', component: ManageList },
   { path: '/user-manage', component: UserManage },

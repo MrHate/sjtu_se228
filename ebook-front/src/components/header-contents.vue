@@ -16,6 +16,7 @@
 			<b-nav-item to="/all">All Books</b-nav-item>
 			<b-nav-item v-if="isAdmin" to="/book-manage">Book Manage</b-nav-item>
 			<b-nav-item v-if="isAdmin" to="/user-manage">User Manage</b-nav-item>
+			<b-nav-item v-if="!isAdmin" to="/purchased">Purchased</b-nav-item>
 			<b-nav-item v-if="!isAdmin" to="/cart">Cart</b-nav-item>
 			<b-nav-item to="/orders">Orders</b-nav-item>
 			<b-nav-item to="/profile" active>
