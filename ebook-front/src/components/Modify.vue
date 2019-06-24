@@ -137,7 +137,7 @@
 							img:this.image
 						}
 					}).then(()=>{
-						this.$router.push('/manage');
+						this.$router.push('/book-manage');
 					})
 				});
 			}

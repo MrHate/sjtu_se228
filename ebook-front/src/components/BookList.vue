@@ -1,6 +1,6 @@
 <template>
 <div>
-	<b-table :items="bookList" :sort-by.sync="sortBy" :sort-desc="sortDesc" :fields="fields" :filter="this.searchText" :current-page="currentPage" :perPage="perPage" striped>
+	<b-table :items="bookList" :sort-by.sync="sortBy" :sort-desc="sortDesc" :fields="fields" :filter="searchText" :current-page="currentPage" :perPage="perPage" striped>
 		<template slot="action" slot-scope="row">
 			<b-button size="sm" class="mr-1" @click="row.toggleDetails" @mouseover="fetchImage(row.item.id)">
 				{{ row.detailsShowing ? 'Hide' : 'Show' }} Details

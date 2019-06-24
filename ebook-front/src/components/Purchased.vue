@@ -4,9 +4,6 @@
 		<b-container>
 			<b-row>
 				<b-col>
-					<b-form-input size="sm" class="mr-sm-2" v-model="searchText" placeholder="Search order list"></b-form-input>
-				</b-col>
-				<b-col>
 					<b-form-input type="date" size="sm" class="mr-sm-2" v-model="beginDate"></b-form-input>
 				</b-col>
 				<b-col>
@@ -19,7 +16,7 @@
 		</b-container>
 	</b-form-group>
 	<br>
-	<b-table :items="filteredList" :fields="fields" :filter="searchText" :sort-by.sync="sortBy" :sort-desc="sortDesc" striped></b-table>
+	<b-table :items="filteredList" :fields="fields" :sort-by.sync="sortBy" :sort-desc="sortDesc" striped></b-table>
 	<br>
 	<p>Total: {{filteredList.length}} books, {{totalSpending}} dollars.</p>
 </div>
@@ -30,7 +27,6 @@ export default {
 	name: 'Purchased',
 	data:function(){
 		return{
-			searchText:"",
 			filteredList:[],
 			username:"",
 			fields: [

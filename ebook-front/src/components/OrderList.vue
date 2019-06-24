@@ -48,7 +48,7 @@ export default {
 				{key:'orderid',sortable:true},
 			],
 			sortBy:'time',
-			sortDesc:false,
+			sortDesc:true,
 			beginDate:null,
 			endDate:null
 		}
