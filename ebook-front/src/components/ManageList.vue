@@ -31,6 +31,7 @@ export default {
 			bookList: [],
 			loadedImage:[],
 			fields: [
+				{key:'id',sortable:true},
 				{key:'isbn',sortable:true},
 				{key:'name',sortable:true},
 				{key:'author',sortable:true},

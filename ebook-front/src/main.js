@@ -17,6 +17,7 @@ import CartList from './components/CartList.vue'
 import Purchased from './components/Purchased.vue'
 import OrderList from './components/OrderList.vue'
 import ManageList from './components/ManageList.vue'
+import Analyze from './components/Analyze.vue'
 import UserManage from './components/UserManage.vue'
 
 import Modify from './components/Modify.vue'
@@ -44,6 +45,7 @@ const routes = [
   { path: '/orders', component: OrderList },
   { path: '/book-manage', component: ManageList },
   { path: '/user-manage', component: UserManage },
+  { path: '/analyze', component: Analyze },
   { path: '/modify/:bookid', component: Modify, props:true },
   { path: '/profile', component: Profile},
   { path: '/login', component: Login },
