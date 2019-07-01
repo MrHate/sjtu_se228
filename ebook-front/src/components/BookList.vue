@@ -5,7 +5,7 @@
 			<b-button size="sm" class="mr-1" @click="row.toggleDetails" @mouseover="fetchImage(row.item.id)">
 				{{ row.detailsShowing ? 'Hide' : 'Show' }} Details
 			</b-button>
-			<b-button size="sm" class="mr-1" @click="addToCart(row.item.id)">
+			<b-button v-if="!isAdmin" size="sm" class="mr-1" @click="addToCart(row.item.id)">
 				Add to Cart
 			</b-button>
 		</template>	
@@ -48,6 +48,8 @@ export default {
 			currentPage:1,
 			perPage:5,
 			totalRows:0,
+			username:"",
+			isAdmin:false,
 			fields: [
 				{key:'isbn',sortable:true},
 				{key:'name',sortable:true},
@@ -61,6 +63,10 @@ export default {
 		}
 	},
 	mounted:function(){
+		this.axios.get('users/current').then((response)=>{
+			this.username = response.data;
+			this.isAdmin = (this.username == 'admin');
+		});
 		this.axios.get('books/all').then((response)=>{
 			this.bookList = response.data.map((e)=>{
 				e.image = '';
