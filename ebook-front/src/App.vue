@@ -3,7 +3,9 @@
 	<HeaderContents/>
 	<br>
 	<b-container fluid>
+		<b-card>
 		<router-view></router-view>			
+		</b-card>
 	</b-container>
 </div>
 </template>

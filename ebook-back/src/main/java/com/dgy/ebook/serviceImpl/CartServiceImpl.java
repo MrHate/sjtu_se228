@@ -5,13 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dgy.ebook.dao.BookDao;
+import com.dgy.ebook.dao.CartDao;
+import com.dgy.ebook.dao.OrderDao;
 import com.dgy.ebook.entity.BookInfo;
 import com.dgy.ebook.entity.CartItem;
 import com.dgy.ebook.entity.OrderBatch;
 import com.dgy.ebook.entity.OrderItem;
-import com.dgy.ebook.repository.BookRepository;
-import com.dgy.ebook.repository.CartRepository;
-import com.dgy.ebook.repository.OrderBatchRepository;
 import com.dgy.ebook.service.CartService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +23,17 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CartServiceImpl implements CartService{
 	@Autowired 
-	private CartRepository cartRepository;
+	private CartDao cartDao;
 	@Autowired
-	private OrderBatchRepository orderRepository;
+	private OrderDao orderDao;
 	@Autowired
-	private BookRepository bookRepository;
+	private BookDao bookDao;
 
 	public String getCartForUser(String username){
-		List<CartItem> items = cartRepository.findByUsername(username);
+		List<CartItem> items = cartDao.findByUsername(username);
 		ArrayList<String> res = new ArrayList();
 		for(CartItem item : items){
-			BookInfo book = bookRepository.findById(item.getBid()).get();
+			BookInfo book = bookDao.findById(item.getBid());
 			JSONObject jobj = new JSONObject();
 			jobj.put("id",item.getId());
 			jobj.put("bid",item.getBid());
@@ -48,26 +48,26 @@ public class CartServiceImpl implements CartService{
 	}
 
 	public void updateItem(String username,int bid,int quantity){
-		CartItem ci = cartRepository.findByUsernameAndBid(username,bid);
+		CartItem ci = cartDao.findByUsernameAndBid(username,bid);
 		if(ci == null){
 			ci = new CartItem();
 			ci.setUsername(username);
 			ci.setBid(bid);
 		}
 		ci.setQuantity(quantity);
-		cartRepository.save(ci);
+		cartDao.save(ci);
 	}
 
 	public void deleteItem(String username,int bid){
-		cartRepository.delete(cartRepository.findByUsernameAndBid(username,bid));
+		cartDao.delete(cartDao.findByUsernameAndBid(username,bid));
 	}
 
 	public void deleteByUsername(String username){
-		cartRepository.deleteInBatch(cartRepository.findByUsername(username));
+		cartDao.deleteInBatch(cartDao.findByUsername(username));
 	}
 
 	public boolean addToCart(String username,int bid){
-		CartItem ci = cartRepository.findByUsernameAndBid(username,bid);
+		CartItem ci = cartDao.findByUsernameAndBid(username,bid);
 		if(ci == null){
 			ci = new CartItem();
 			ci.setUsername(username);
@@ -76,19 +76,21 @@ public class CartServiceImpl implements CartService{
 		}else{
 			ci.setQuantity(ci.getQuantity()+1);
 		}
-		cartRepository.save(ci);
+		cartDao.save(ci);
 
 		return true;
 	}
 
-	public boolean clearCart(String username){
+	public String clearCart(String username){
+		String res = "";
+
 		OrderBatch ob = new OrderBatch();
 		ob.setUsername(username);
 		ob.setDate(new Date());
 		ArrayList<OrderItem> ois = new ArrayList<OrderItem>();
 
-		for(CartItem ci : cartRepository.findByUsername(username)){
-			BookInfo book = bookRepository.findById(ci.getBid()).get();
+		for(CartItem ci : cartDao.findByUsername(username)){
+			BookInfo book = bookDao.findById(ci.getBid());
 
 			int bquantity = book.getQuantity();
 			int cquantity = ci.getQuantity();
@@ -98,9 +100,13 @@ public class CartServiceImpl implements CartService{
 			if(bquantity < 0){
 				oquantity += bquantity;
 				bquantity = 0;
+				res += "[Warning] \"" + book.getName() + "\" only remains: " + String.valueOf(oquantity) + "\n";
+			}
+			else{
+				res += "[Success] \"" + book.getName() + "\" bought: " + String.valueOf(oquantity) + "\n";
 			}
 			book.setQuantity(bquantity);
-			bookRepository.save(book);
+			bookDao.save(book);
 			
 			OrderItem oi = new OrderItem();
 			oi.setBid(ci.getBid());
@@ -112,16 +118,16 @@ public class CartServiceImpl implements CartService{
 		}
 
 		if(ois.isEmpty()){
-			return false;
+			return "empty cart";
 		}
 
 		log.info("> "+username+" clear cart with "+String.valueOf(ois.size())+" items");
 
 		ob.setItems(ois);
-		orderRepository.save(ob);
-		cartRepository.deleteInBatch(cartRepository.findByUsername(username));
+		orderDao.save(ob);
+		cartDao.deleteInBatch(cartDao.findByUsername(username));
 		
-		return true;
+		return res;
 	}
 }
 

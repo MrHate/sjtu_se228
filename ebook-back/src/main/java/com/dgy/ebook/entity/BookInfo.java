@@ -1,5 +1,6 @@
 package com.dgy.ebook.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +30,7 @@ public class BookInfo{
 	@JSONField
 	private int quantity;
 	@JSONField
+	@Column(length = 3000)
 	private String desp;
 
 	@Override

@@ -44,8 +44,8 @@ public class OrderController{
 	//}
 
 	@DeleteMapping
-	public String removeOrderItem(@RequestParam String username,@RequestParam int bid){
-		if(!orderService.deleteItem(username,bid)){
+	public String removeOrderItem(@RequestParam int id){
+		if(!orderService.deleteItem(id)){
 			log.warn(">delete failed");
 		}
 

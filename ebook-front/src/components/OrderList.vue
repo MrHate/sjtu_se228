@@ -19,13 +19,23 @@
 		</b-container>
 	</b-form-group>
 	<br>
-	<b-table :items="filteredList" :fields="fields" :filter="searchText" :sort-by.sync="sortBy" :sort-desc="sortDesc" striped>
+	<b-table :items="filteredList" :fields="fields" :filter="searchText" :sort-by.sync="sortBy" :sort-desc="sortDesc" :current-page="currentPage" :perPage="perPage" striped>
 		<template v-if="isAdmin" slot="action" slot-scope="row">
-			<b-button size="sm" class="mr-1" @click="removeOrderItem(row.item.bid,row.item.username)">
+			<b-button size="sm" class="mr-1" @click="removeOrderItem(row.item.id,row.item.username)">
 				Remove
 			</b-button>
 		</template>	
 	</b-table>
+	<b-row>
+		<b-col md="6" class="my-1">
+			<b-pagination
+			v-model="currentPage"
+			:total-rows="totalRows"
+			:per-page="perPage"
+			class="my-0"
+			></b-pagination>
+		</b-col>
+	</b-row>
 </div>
 </template>
 
@@ -38,6 +48,9 @@ export default {
 			bookList: [],
 			filteredList:[],
 			username:"",
+			currentPage:1,
+			perPage:5,
+			totalRows:0,
 			isAdmin:false,
 			fields: [
 				{key:'time',sortable:true},
@@ -61,6 +74,7 @@ export default {
 				this.axios.get('orders/all').then((response)=>{
 					this.bookList = response.data;
 					this.filteredList = this.bookList;
+					this.totalRows = this.filteredList.length;
 				})
 				this.fields.push({key:'username',sortable:true});
 				this.fields.push({key:'action',sortable:false});
@@ -68,13 +82,15 @@ export default {
 				this.axios.get('orders',{params:{username:this.username}}).then((response)=>{
 					this.bookList = response.data;
 					this.filteredList = this.bookList;
+					this.totalRows = this.filteredList.length;
 				})
 			}
 		});
 	},
 	methods:{
 		removeOrderItem(id,username){
-			this.axios.delete('orders',{params:{username:username,bid:id}}).then(()=>{
+			this.axios.delete('orders',{params:{id:id}}).then(()=>{
+				console.log(id);
 				this.$router.go(0);
 			})
 		},
@@ -90,6 +106,7 @@ export default {
 				let d = e.time.substring(0,10);
 				return (d >= this.beginDate) && (d <= this.endDate);
 			});
+			this.totalRows = this.filteredList.length;
 		}
 	}
 }

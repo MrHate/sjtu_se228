@@ -4,31 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dgy.ebook.dao.BookDao;
+import com.dgy.ebook.dao.OrderDao;
 import com.dgy.ebook.entity.BookInfo;
 import com.dgy.ebook.entity.OrderBatch;
 import com.dgy.ebook.entity.OrderItem;
-import com.dgy.ebook.repository.BookRepository;
-import com.dgy.ebook.repository.OrderBatchRepository;
-import com.dgy.ebook.repository.OrderRepository;
 import com.dgy.ebook.service.OrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
+@Log4j2
 public class OrderServiceImpl implements OrderService{
 	@Autowired 
-	private OrderRepository orderItemRepository;
-	@Autowired 
-	private OrderBatchRepository orderRepository;
+	private OrderDao orderDao;
 	@Autowired
-	private BookRepository bookRepository;
+	private BookDao bookDao;
 
 	private String joinBookInfo(List<OrderBatch> batchs){
 		ArrayList<String> res = new ArrayList();
 		for(OrderBatch batch : batchs){
 			for(OrderItem item : batch.getItems()){
-				BookInfo book = bookRepository.findById(item.getBid()).get();
+				BookInfo book = bookDao.findById(item.getBid());
 				JSONObject jobj = new JSONObject();
 				jobj.put("orderid",batch.getId());
 				jobj.put("id",item.getId());
@@ -47,25 +47,17 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	public String getOrderForUser(String username){
-		return joinBookInfo(orderRepository.findByUsername(username));
+		return joinBookInfo(orderDao.findByUsername(username));
 	}
 
 	public String getOrdersAll(){
-		return joinBookInfo(orderRepository.findAll());
+		return joinBookInfo(orderDao.findAll());
 	}
 
-	public boolean deleteItem(String username,int bid){
-		for(OrderBatch batch : orderRepository.findByUsername(username)){
-			//log.info(">deleteItem find: "+item.getUsername()+"/"+item.getBid());
-			for(OrderItem item : batch.getItems()){
-				if(item.getBid() == bid){
-					orderRepository.deleteById(item.getId());
-					return true;
-				}
-			}
-		}
-
-		return false;
+	public boolean deleteItem(int id){
+		log.info(">deleteItem: "+id);
+		orderDao.deleteItemById(id);
+		return true;
 	}
 
 }

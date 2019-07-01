@@ -2,12 +2,9 @@ package com.dgy.ebook.repository;
 
 import com.dgy.ebook.entity.BookImage;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
-// CRUD refers Create, Read, Update, Delete
-
-public interface ImageRepository extends CrudRepository<BookImage, Integer> {
+public interface ImageRepository extends MongoRepository<BookImage, Integer> {
 
 }
 

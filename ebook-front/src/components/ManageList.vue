@@ -8,7 +8,7 @@
 		</b-input-group>
 	</b-form-group>
 	<br>
-	<b-table :items="bookList" :sort-by.sync="sortBy" :sort-desc="sortDesc" :fields="fields" :filter="searchText" striped>
+	<b-table :items="bookList" :sort-by.sync="sortBy" :sort-desc="sortDesc" :fields="fields" :filter="searchText" :current-page="currentPage" :perPage="perPage" striped>
 		<template slot="action" slot-scope="row">
 			<b-button size="sm" class="mr-1" @click="viewDetail(row.item.id)">
 				View Detail
@@ -18,6 +18,16 @@
 			</b-button>
 		</template>	
 	</b-table>
+	<b-row>
+		<b-col md="6" class="my-1">
+			<b-pagination
+			v-model="currentPage"
+			:total-rows="totalRows"
+			:per-page="perPage"
+			class="my-0"
+			></b-pagination>
+		</b-col>
+	</b-row>
 	<b-button @click="createEntry">Create New Entry</b-button>
 </div>
 </template>
@@ -30,6 +40,9 @@ export default {
 			searchText:"",
 			bookList: [],
 			loadedImage:[],
+			currentPage:1,
+			perPage:5,
+			totalRows:0,
 			fields: [
 				{key:'id',sortable:true},
 				{key:'isbn',sortable:true},
@@ -49,6 +62,7 @@ export default {
 				e.image = '';
 				return e;
 			});
+			this.totalRows = this.bookList.length;
 		});
 	},
 	methods:{

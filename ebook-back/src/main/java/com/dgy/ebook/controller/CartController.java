@@ -50,7 +50,6 @@ public class CartController{
 
 	@GetMapping(value="clear")
 	public String clearCart(@RequestParam String username){
-		service.clearCart(username);
-		return "clear";
+		return service.clearCart(username);
 	}
 }

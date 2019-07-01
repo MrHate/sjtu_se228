@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.dgy.ebook.dao.BookDao;
+import com.dgy.ebook.dao.OrderDao;
 import com.dgy.ebook.entity.BookInfo;
 import com.dgy.ebook.entity.OrderBatch;
 import com.dgy.ebook.entity.OrderItem;
-import com.dgy.ebook.repository.BookRepository;
-import com.dgy.ebook.repository.OrderBatchRepository;
-import com.dgy.ebook.repository.OrderRepository;
 import com.dgy.ebook.service.AnalyzeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +18,13 @@ import org.springframework.stereotype.Service;
 public class AnalyzeServiceImpl implements AnalyzeService {
 	
 	@Autowired
-	private OrderRepository orderRepository;
+	private OrderDao orderDao;
 	@Autowired
-	private OrderBatchRepository orderBatchRepository;
-	@Autowired
-	private BookRepository bookRepository;
+	private BookDao bookDao;
 
 	public int analyzeSaleForBook(int bookId,Date start,Date end){
 		int res = 0; // count for sales of a book
-		List<OrderItem> ois = orderRepository.findByBid(bookId);
+		List<OrderItem> ois = orderDao.findItemByBid(bookId);
 		for(OrderItem oi : ois){
 			Date date = oi.getOrderBatch().getDate();
 			if(date.compareTo(start)>=0 && date.compareTo(end)<=0){
@@ -40,7 +37,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 
 	public double analyzeSpendingForUser(String username,Date start,Date end){
 		double res = 0; // sum of spending of an user
-		List<OrderBatch> orderBatchs = orderBatchRepository.findByUsername(username);
+		List<OrderBatch> orderBatchs = orderDao.findByUsername(username);
 		for(OrderBatch ob : orderBatchs){
 			Date date = ob.getDate();
 			if(date.compareTo(start)>=0 && date.compareTo(end)<=0){
@@ -55,12 +52,12 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 
 	public List<BookInfo> analyzeBuysForUser(String username,Date start,Date end){
 		ArrayList<BookInfo> res = new ArrayList<BookInfo>();
-		List<OrderBatch> orderBatchs = orderBatchRepository.findByUsername(username);
+		List<OrderBatch> orderBatchs = orderDao.findByUsername(username);
 		for(OrderBatch ob : orderBatchs){
 			Date date = ob.getDate();
 			if(date.compareTo(start)>=0 && date.compareTo(end)<=0){
 				for(OrderItem oi : ob.getItems()){
-					res.add(bookRepository.findById(oi.getBid()).get());
+					res.add(bookDao.findById(oi.getBid()));
 				}
 			}
 		}

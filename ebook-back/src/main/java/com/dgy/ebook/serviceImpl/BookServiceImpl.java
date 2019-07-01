@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dgy.ebook.dao.BookDao;
 import com.dgy.ebook.entity.BookImage;
 import com.dgy.ebook.entity.BookInfo;
-import com.dgy.ebook.repository.BookRepository;
-import com.dgy.ebook.repository.ImageRepository;
 import com.dgy.ebook.service.BookService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +15,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookServiceImpl implements BookService{
 	@Autowired
-	private BookRepository bookRepository;
-	@Autowired
-	private ImageRepository imageRepository;
+	private BookDao bookDao;
+	//@Autowired
+	//private ImageRepository imageRepository;
 
 	public List<BookInfo> getBookList(){
 		ArrayList<BookInfo> res = new ArrayList();
-		for(BookInfo info : bookRepository.findAll()){
+		for(BookInfo info : bookDao.findAll()){
 			res.add(info);
 		}
 		return res;
 	}
 	
 	public String getBookWithImageAsJSON(int id,boolean withImg){
-		BookInfo book = bookRepository.findById(id).get();
+		BookInfo book = bookDao.findById(id);
 		if(book == null)return "not found";
 
 		JSONObject obj = new JSONObject();
@@ -48,21 +47,20 @@ public class BookServiceImpl implements BookService{
     }
 
 	public BookInfo updateBook(BookInfo info){
-		return bookRepository.save(info);
+		return bookDao.save(info);
 	}
 
 	public void removeBook(int id){
-		bookRepository.deleteById(id);
-		imageRepository.deleteById(id);
+		bookDao.deleteById(id);
 	}
 
 	public String getImg(int id){
-		String bytes = imageRepository.findById(id).get().getImg();
+		String bytes = bookDao.findImageById(id);
 		return bytes;
 	}
 
 	public boolean updateImage(BookImage img){
-		imageRepository.save(img);
+		bookDao.saveImage(img);
 		return true;
 	}
 

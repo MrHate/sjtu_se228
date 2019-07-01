@@ -6,6 +6,6 @@ public interface CartService{
 	public void deleteItem(String username,int bid);
 	public void deleteByUsername(String username);
 	public boolean addToCart(String username,int bid);
-	public boolean clearCart(String username);
+	public String clearCart(String username);
 }
 

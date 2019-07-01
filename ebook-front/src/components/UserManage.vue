@@ -8,13 +8,21 @@
 		</b-input-group>
 	</b-form-group>
 	<br>
-	<b-table :items="bookList" :sort-by.sync="sortBy" :sort-desc="sortDesc" :fields="fields" :filter="searchText" striped>
+	<b-table :items="bookList" :sort-by.sync="sortBy" :sort-desc="sortDesc" :fields="fields" :filter="searchText" :current-page="currentPage" :perPage="perPage" striped>
 		<template slot="action" slot-scope="row">
 			<b-button size="sm" class="mr-1" @click="toggleEnabled(row.item.username,!row.item.enabled)">
 				Toggle Enabled
 			</b-button>
 		</template>	
 	</b-table>
+	<b-col md="6" class="my-1">
+		<b-pagination
+		v-model="currentPage"
+		:total-rows="totalRows"
+		:per-page="perPage"
+		class="my-0"
+		></b-pagination>
+	</b-col>
 </div>
 </template>
 
@@ -26,6 +34,9 @@ export default {
 			searchText:"",
 			bookList: [],
 			loadedImage:[],
+			currentPage:1,
+			perPage:5,
+			totalRows:0,
 			fields: [
 				{key:'id',sortable:true},
 				{key:'username',sortable:true},
@@ -39,6 +50,7 @@ export default {
 	mounted:function(){
 		this.axios.get('users/all').then((response)=>{
 			this.bookList = response.data;
+			this.totalRows = this.bookList.length;
 		});
 	},
 	methods:{

@@ -6,9 +6,6 @@ import com.dgy.ebook.entity.CartItem;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
-// CRUD refers Create, Read, Update, Delete
-
 public interface CartRepository extends JpaRepository<CartItem, Integer> {
 
 	List<CartItem> findByUsername(String username);

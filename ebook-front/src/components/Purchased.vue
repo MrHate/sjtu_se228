@@ -16,7 +16,17 @@
 		</b-container>
 	</b-form-group>
 	<br>
-	<b-table :items="filteredList" :fields="fields" :sort-by.sync="sortBy" :sort-desc="sortDesc" striped></b-table>
+	<b-table :items="filteredList" :fields="fields" :sort-by.sync="sortBy" :sort-desc="sortDesc" :current-page="currentPage" :perPage="perPage" striped></b-table>
+	<b-row>
+		<b-col md="6" class="my-1">
+			<b-pagination
+			v-model="currentPage"
+			:total-rows="totalRows"
+			:per-page="perPage"
+			class="my-0"
+			></b-pagination>
+		</b-col>
+	</b-row>
 	<br>
 	<p>Total: {{filteredList.length}} books, {{totalSpending}} dollars.</p>
 </div>
@@ -29,6 +39,9 @@ export default {
 		return{
 			filteredList:[],
 			username:"",
+			currentPage:1,
+			perPage:5,
+			totalRows:0,
 			fields: [
 				{key:'isbn',sortable:true},
 				{key:'name',sortable:true},
@@ -63,6 +76,7 @@ export default {
 			var reg = new RegExp('-','g');
 			this.axios.get('analyze/user-books',{params:{username:this.username,startDate:this.beginDate.replace(reg,'/'),endDate:this.endDate.replace(reg,'/')}}).then((response)=>{
 				this.filteredList = response.data;
+				this.totalRows = this.filteredList.length;
 			});
 		}
 	}

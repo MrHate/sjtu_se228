@@ -8,7 +8,7 @@
 		</b-input-group>
 	</b-form-group>
 	<br>
-	<b-table :items="bookList" :fields="fields" :filter="searchText" striped>
+	<b-table :items="bookList" :fields="fields" :filter="searchText" :current-page="currentPage" :perPage="perPage" striped>
 		<template slot="quantity" slot-scope="row">
 			<b-row class="text-align:center">
 				<b-col cols="4"></b-col>
@@ -26,7 +26,18 @@
 			</b-button>
 		</template>	
 	</b-table>
+	<b-row>
+		<b-col md="6" class="my-1">
+			<b-pagination
+			v-model="currentPage"
+			:total-rows="totalRows"
+			:per-page="perPage"
+			class="my-0"
+			></b-pagination>
+		</b-col>
+	</b-row>
 	<b-button @click="onButtonBuy">Buy</b-button>
+	<p>Total Price: {{totalPrice}}</p>
 </div>
 </template>
 
@@ -37,6 +48,10 @@ export default {
 		return{
 			searchText:"",
 			bookList: [],
+			currentPage:1,
+			perPage:5,
+			totalRows:0,
+			totalPrice:0,
 			username:"",
 			fields: ['bookname','isbn','quantity','price', 'action'],
 		}
@@ -46,6 +61,10 @@ export default {
 			this.username = response.data;
 			this.axios.get('cart',{params:{username:this.username}}).then((response)=>{
 				this.bookList = response.data;
+				this.totalRows = this.bookList.length;
+				for(var i in this.bookList){
+					this.totalPrice += this.bookList[i].quantity * this.bookList[i].price;
+				}
 			})
 		});
 	},
@@ -56,7 +75,8 @@ export default {
 			})
 		},
 		onButtonBuy(){
-			this.axios.get('cart/clear',{params:{username:this.username}}).then(()=>{
+			this.axios.get('cart/clear',{params:{username:this.username}}).then((response)=>{
+				alert(response.data);
 				this.$router.go(0);
 			})
 		},

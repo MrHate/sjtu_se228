@@ -2,8 +2,8 @@ package com.dgy.ebook.serviceImpl;
 
 import java.util.List;
 
+import com.dgy.ebook.dao.UserDao;
 import com.dgy.ebook.entity.UserInfo;
-import com.dgy.ebook.repository.UserRepository;
 import com.dgy.ebook.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService{
 	@Autowired 
-	private UserRepository userRepository;
+	private UserDao userDao;
 
 	public List<UserInfo> getAllUsers(){
-		return userRepository.findAll();
+		return userDao.findAll();
 	}
 
 	public UserInfo getUserInfo(String username){
-		for(UserInfo n : userRepository.findByUsername(username)){
+		for(UserInfo n : userDao.findByUsername(username)){
 			return n;
 		}
 		return null;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService{
 	public int getIdForUser(String username){
 		int res = -1;
 
-		for(UserInfo n : userRepository.findByUsername(username)){
+		for(UserInfo n : userDao.findByUsername(username)){
 			res = n.getId();
 		}
 		return res;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService{
 	public String getAvatarForUser(String username){
 		String res = null;
 
-		for(UserInfo n : userRepository.findByUsername(username)){
+		for(UserInfo n : userDao.findByUsername(username)){
 			res = n.getAvatar();
 		}
 		return res;
@@ -46,14 +46,14 @@ public class UserServiceImpl implements UserService{
 	public String getPasswordForUser(String username){
 		String res = null;
 
-		for(UserInfo n : userRepository.findByUsername(username)){
+		for(UserInfo n : userDao.findByUsername(username)){
 			res = n.getPassword();
 		}
 		return res;
 	}
 
 	public boolean createUser(String username,String password,String email){
-		for(UserInfo n : userRepository.findByUsername(username)){
+		for(UserInfo n : userDao.findByUsername(username)){
 			return false;
 		}
 
@@ -64,44 +64,44 @@ public class UserServiceImpl implements UserService{
 		n.setEnabled(true);
 
 		int id = 2;
-		while(userRepository.existsById(id)){
+		while(userDao.existsById(id)){
 			++id;
 		}
 		n.setId(id);
 
-		userRepository.save(n);
+		userDao.save(n);
 
 		return true;
 	}
 
 	public void setUserEnabled(String username,boolean enabled){
-		for(UserInfo n : userRepository.findByUsername(username)){
+		for(UserInfo n : userDao.findByUsername(username)){
 			n.setEnabled(enabled);
-			userRepository.save(n);
+			userDao.save(n);
 			return;
 		}
 	}
 
 	public boolean isUserEnabled(String username){
-		for(UserInfo n : userRepository.findByUsername(username)){
+		for(UserInfo n : userDao.findByUsername(username)){
 			return n.isEnabled();
 		}
 		return false;
 	}
 
 	public void updateUserAvatar(String username,String avatar){
-		for(UserInfo n : userRepository.findByUsername(username)){
+		for(UserInfo n : userDao.findByUsername(username)){
 			n.setAvatar(avatar);
-			userRepository.save(n);
+			userDao.save(n);
 			return;
 		}
 	}
 
 	public boolean updateUserPassword(String username,String password,String newPassword){
-		for(UserInfo n : userRepository.findByUsername(username)){
+		for(UserInfo n : userDao.findByUsername(username)){
 			if(!n.getPassword().equals(password)){return false;}
 			n.setPassword(newPassword);
-			userRepository.save(n);
+			userDao.save(n);
 			return true;
 		}
 		return false;
