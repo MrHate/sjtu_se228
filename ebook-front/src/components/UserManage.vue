@@ -48,13 +48,16 @@ export default {
 		}
 	},
 	mounted:function(){
-		this.axios.get('users/all').then((response)=>{
-			this.bookList = response.data;
-			this.totalRows = this.bookList.length;
-		});
+		this.getList();
 	},
 	methods:{
-		toggleEnabled(username,enabled){
+		getList:function(){
+			this.axios.get('users/all').then((response)=>{
+				this.bookList = response.data;
+				this.totalRows = this.bookList.length;
+			});
+		},
+		toggleEnabled:function(username,enabled){
 			this.axios({
 				method:'get',
 				url:'users/set-user-enabled',
@@ -63,7 +66,7 @@ export default {
 					enabled:enabled
 				}
 			}).then(()=>{
-				this.$router.go(0);
+				this.getList();
 			})
 		}
 	}

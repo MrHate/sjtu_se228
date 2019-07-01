@@ -21,7 +21,7 @@
 	<br>
 	<b-table :items="filteredList" :fields="fields" :filter="searchText" :sort-by.sync="sortBy" :sort-desc="sortDesc" :current-page="currentPage" :perPage="perPage" striped>
 		<template v-if="isAdmin" slot="action" slot-scope="row">
-			<b-button size="sm" class="mr-1" @click="removeOrderItem(row.item.id,row.item.username)">
+			<b-button size="sm" class="mr-1" @click="removeOrderItem(row.item.id)">
 				Remove
 			</b-button>
 		</template>	
@@ -88,9 +88,8 @@ export default {
 		});
 	},
 	methods:{
-		removeOrderItem(id,username){
+		removeOrderItem(id){
 			this.axios.delete('orders',{params:{id:id}}).then(()=>{
-				console.log(id);
 				this.$router.go(0);
 			})
 		},
