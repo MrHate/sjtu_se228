@@ -13,6 +13,9 @@
 			<b-button size="sm" class="mr-1" @click="toggleEnabled(row.item.username,!row.item.enabled)">
 				Toggle Enabled
 			</b-button>
+			<b-button size="sm" class="mr-1" @click="toggleAdmin(row.item.username,!row.item.admin)">
+				Toggle Admin
+			</b-button>
 		</template>	
 	</b-table>
 	<b-col md="6" class="my-1">
@@ -41,6 +44,7 @@ export default {
 				{key:'id',sortable:true},
 				{key:'username',sortable:true},
 				{key:'enabled',sortable:false},
+				{key:'admin',sortable:false},
 				{key:'action',sortable:false}
 			],
 			sortBy:'time',
@@ -64,6 +68,18 @@ export default {
 				params:{
 					username:username,
 					enabled:enabled
+				}
+			}).then(()=>{
+				this.getList();
+			})
+		},
+		toggleAdmin:function(username,enabled){
+			this.axios({
+				method:'get',
+				url:'users/set-user-admin',
+				params:{
+					username:username,
+					isAdmin:enabled
 				}
 			}).then(()=>{
 				this.getList();

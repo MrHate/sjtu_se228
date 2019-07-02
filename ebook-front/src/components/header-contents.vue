@@ -47,7 +47,9 @@ export default {
 			if(response.data != 'unauthorized'){
 				this.username = response.data;
 				this.isLogged = true;
-				this.isAdmin = (this.username == 'admin');
+				this.axios.get('users/current').then((response)=>{
+					this.isAdmin = response.data;
+				});
 				this.axios.get('users/avatar',{params:{username:this.username}}).then((response)=>{
 					if(response.data != ''){this.avatar = response.data;}
 				})

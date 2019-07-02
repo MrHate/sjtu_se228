@@ -48,7 +48,6 @@ export default {
 			currentPage:1,
 			perPage:5,
 			totalRows:0,
-			username:"",
 			isAdmin:false,
 			fields: [
 				{key:'isbn',sortable:true},
@@ -63,9 +62,8 @@ export default {
 		}
 	},
 	mounted:function(){
-		this.axios.get('users/current').then((response)=>{
-			this.username = response.data;
-			this.isAdmin = (this.username == 'admin');
+		this.axios.get('users/isAdmin').then((response)=>{
+			this.isAdmin = response.data;
 		});
 		this.axios.get('books/all').then((response)=>{
 			this.bookList = response.data.map((e)=>{

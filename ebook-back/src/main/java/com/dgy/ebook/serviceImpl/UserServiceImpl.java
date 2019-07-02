@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService{
 		n.setPassword(password);
 		n.setEmail(email);
 		n.setEnabled(true);
+		n.setAdmin(false);
 
 		int id = 2;
 		while(userDao.existsById(id)){
@@ -72,6 +73,21 @@ public class UserServiceImpl implements UserService{
 		userDao.save(n);
 
 		return true;
+	}
+
+	public void setUserAdmin(String username,boolean isAdmin){
+		for(UserInfo n : userDao.findByUsername(username)){
+			n.setAdmin(isAdmin);
+			userDao.save(n);
+			return;
+		}
+	}
+
+	public boolean isUserAdmin(String username){
+		for(UserInfo n : userDao.findByUsername(username)){
+			return n.isAdmin();
+		}
+		return false;
 	}
 
 	public void setUserEnabled(String username,boolean enabled){

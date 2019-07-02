@@ -78,4 +78,15 @@ public class UserController{
 		userService.setUserEnabled(username,enabled);
 		return true;
 	}
+
+	@GetMapping(value="/isAdmin")
+	public boolean isAdmin(){
+		return userService.isUserAdmin(getCurrentUsername());
+	}
+
+	@GetMapping(value="/set-user-admin")
+	public boolean setAdmin(@RequestParam String username,@RequestParam boolean isAdmin){
+		userService.setUserAdmin(username,isAdmin);
+		return true;
+	}
 }

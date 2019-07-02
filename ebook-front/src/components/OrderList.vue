@@ -69,22 +69,24 @@ export default {
 	mounted:function(){
 		this.axios.get('users/current').then((response)=>{
 			this.username = response.data;
-			this.isAdmin = (this.username == 'admin');
-			if(this.isAdmin){
-				this.axios.get('orders/all').then((response)=>{
-					this.bookList = response.data;
-					this.filteredList = this.bookList;
-					this.totalRows = this.filteredList.length;
-				})
-				this.fields.push({key:'username',sortable:true});
-				this.fields.push({key:'action',sortable:false});
-			}else{
-				this.axios.get('orders',{params:{username:this.username}}).then((response)=>{
-					this.bookList = response.data;
-					this.filteredList = this.bookList;
-					this.totalRows = this.filteredList.length;
-				})
-			}
+			this.axios.get('users/isAdmin').then((response)=>{
+				this.isAdmin = response.data;
+				if(this.isAdmin){
+					this.axios.get('orders/all').then((response)=>{
+						this.bookList = response.data;
+						this.filteredList = this.bookList;
+						this.totalRows = this.filteredList.length;
+					})
+					this.fields.push({key:'username',sortable:true});
+					this.fields.push({key:'action',sortable:false});
+				}else{
+					this.axios.get('orders',{params:{username:this.username}}).then((response)=>{
+						this.bookList = response.data;
+						this.filteredList = this.bookList;
+						this.totalRows = this.filteredList.length;
+					})
+				}
+			})
 		});
 	},
 	methods:{
