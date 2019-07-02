@@ -57,27 +57,31 @@ export default {
 		}
 	},
 	mounted:function(){
-		this.axios.get('users/current').then((response)=>{
-			this.username = response.data;
-			this.axios.get('cart',{params:{username:this.username}}).then((response)=>{
-				this.bookList = response.data;
-				this.totalRows = this.bookList.length;
-				for(var i in this.bookList){
-					this.totalPrice += this.bookList[i].quantity * this.bookList[i].price;
-				}
-			})
-		});
+		this.getList();
 	},
 	methods:{
+		getList(){
+			this.axios.get('users/current').then((response)=>{
+				this.username = response.data;
+				this.axios.get('cart',{params:{username:this.username}}).then((response)=>{
+					this.bookList = response.data;
+					this.totalRows = this.bookList.length;
+					this.totalPrice = 0;
+					for(var i in this.bookList){
+						this.totalPrice += this.bookList[i].quantity * this.bookList[i].price;
+					}
+				})
+			});
+		},
 		removeCartItem(id){
 			this.axios.delete('cart',{params:{username:this.username,bid:id}}).then(()=>{
-				this.$router.go(0);
+				this.getList();
 			})
 		},
 		onButtonBuy(){
 			this.axios.get('cart/clear',{params:{username:this.username}}).then((response)=>{
 				alert(response.data);
-				this.$router.go(0);
+				this.getList();
 			})
 		},
 		updateCartItem(id,quantity){

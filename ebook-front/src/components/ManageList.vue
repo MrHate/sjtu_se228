@@ -57,15 +57,18 @@ export default {
 		}
 	},
 	mounted:function(){
-		this.axios.get('books/all').then((response)=>{
-			this.bookList = response.data.map((e)=>{
-				e.image = '';
-				return e;
-			});
-			this.totalRows = this.bookList.length;
-		});
+		this.getList();
 	},
 	methods:{
+		getList(){
+			this.axios.get('books/all').then((response)=>{
+				this.bookList = response.data.map((e)=>{
+					e.image = '';
+					return e;
+				});
+				this.totalRows = this.bookList.length;
+			});
+		},
 		fetchImage(id){
 			if(this.loadedImage.indexOf(id) != -1)return;
 			this.loadedImage.push(id);
@@ -86,7 +89,7 @@ export default {
 					id:id
 				}
 			}).then(()=>{
-				this.$router.go(0);
+				this.getList();
 			})
 		},
 		createEntry(){
